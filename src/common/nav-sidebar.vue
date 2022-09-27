@@ -1,12 +1,12 @@
 <template>
   <div
     class="logo relative ml-6 mr-8"
-    :class="[sidebarVisible ? logoPaddingRight : logoPaddingRightNone]"
+    :class="[sidebarOpen ? logoPaddingRight : logoPaddingRightNone]"
   >
     <img src="../assets/logo-dark.svg" />
   </div>
   <aside
-    :class="[sidebarVisible ? activeClass : hiddenClass]"
+    :class="[sidebarOpen ? activeClass : hiddenClass]"
     class="top-24 left-0 pt-3"
   >
     <span
@@ -52,7 +52,7 @@
   </aside>
   <button
     class="fixed bottom-10 left-0 bg-mainPurple rounded-r-full opacity-100"
-    :class="[sidebarVisible ? hideButton : showButton]"
+    :class="[sidebarOpen ? hideButton : showButton]"
     @click="showSidebar()"
   >
     <img
@@ -63,6 +63,8 @@
 </template>
 
 <script>
+import store from "../store/store.js";
+
 export default {
   name: "NavSidebar",
   props: {
@@ -85,22 +87,21 @@ export default {
   watch: {
     // whenever active changes, this function will run
     active: function () {
-      if (this.sidebarVisible) {
-        document.body.style.overflow = this.sidebarVisible ? "hidden" : "";
+      if (this.sidebarOpen) {
+        document.body.style.overflow = this.sidebarOpen ? "hidden" : "";
       }
     },
   },
   methods: {
     showSidebar() {
-      this.sidebarVisible = !this.sidebarVisible;
-      const el = document.querySelector(".header");
-
-      if (this.sidebarVisible) {
-        el.classList.add("sidebar-open");
-      } else {
-        el.classList.remove("sidebar-open");
-      }
+      this.sidebarOpen = !this.sidebarOpen;
     },
+  },
+  setup() {
+    const { state } = store();
+    return {
+      ...state,
+    };
   },
 };
 </script>

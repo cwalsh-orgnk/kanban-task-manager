@@ -10,16 +10,16 @@ import notes from "../data/data.json";
  */
 const state = reactive({
   notes: notes,
+  sidebarOpen: false,
 });
 
 export default () => {
-  /**
-   * Increment the counter
-   *
-   * @param amount Value to increment (default to `1`)
-   */
   const notesList = () => {
     return state.notes;
+  };
+
+  const sidebarInView = () => {
+    return !state.sidebarOpen;
   };
 
   /**
@@ -28,5 +28,6 @@ export default () => {
   return {
     state: toRefs(state),
     notesList,
+    sidebarInView,
   };
 };

@@ -1,6 +1,6 @@
 <template>
   <header
-    class="header sticky w-full top-o bg-white z-50 h-24 flex items-center px-10 overflow-hidden"
+    class="fixed w-full top-o bg-white z-50 h-24 flex items-center px-10 overflow-hidden top-0"
   >
     <NavSidebar />
     <h1 class="text-xl black font-bold" v-if="note">{{ note }}</h1>
