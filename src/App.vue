@@ -1,26 +1,30 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png" />
-  <HelloWorld msg="Welcome to Your Vue.js App" />
+  <div class="app-wrapper">
+    <HeaderMain />
+    <ViewNotes />
+  </div>
 </template>
 
 <script>
-import HelloWorld from "./components/HelloWorld.vue";
+import HeaderMain from "./common/header-main.vue";
+import ViewNotes from "./components/view-notes.vue";
 
 export default {
   name: "App",
   components: {
-    HelloWorld,
+    HeaderMain,
+    ViewNotes,
   },
 };
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+body {
+  background-color: #f4f7fd;
+  margin: 0;
+  transition: margin ease-in-out 0.3s;
+}
+.sidebar-open {
+  width: calc(100% - 300px);
 }
 </style>
