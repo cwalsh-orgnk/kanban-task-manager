@@ -49,6 +49,13 @@
         </li>
       </ul>
     </nav>
+    <div
+      class="sidebar-actions absolute bottom-0 w-full flex flex-col my-6 flex-grow-0 text-mediumGray text-md font-bold"
+    >
+      <button class="flex items-center justify-center" @click="showSidebar()">
+        <img class="mr-4" src="../assets/icon-hide-sidebar.svg" />Hide sidebar
+      </button>
+    </div>
   </aside>
   <button
     class="fixed bottom-10 left-0 bg-mainPurple rounded-r-full opacity-100"
@@ -77,7 +84,7 @@ export default {
       activeClass:
         "aside position fixed w-[300px] bg-white h-[calc(100vh-96px()] top-24 left-0 sidebar-visible z-10 opacity-100",
       hiddenClass:
-        "aside position fixed bg-white h-[100vh] top-0 left-0 opacity-0",
+        "aside position fixed bg-white h-[100vh] top-24 left-0 opacity-0",
       showButton: "opacity-100",
       hideButton: "opacity-0",
       logoPaddingRight: "pr-20",
@@ -113,7 +120,7 @@ button {
 }
 aside {
   transform: translate(-100%);
-  height: 100vh;
+  height: calc(100vh - 6rem);
   transition: transform ease-in-out 0.3s, opacity ease-in-out 0.3s;
 }
 .sidebar-visible {

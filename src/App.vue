@@ -19,6 +19,11 @@ export default {
 </script>
 
 <style>
+#app {
+  max-height: 100vh;
+  overflow: hidden;
+  height: 100vh;
+}
 body {
   background-color: #f4f7fd;
   margin: 0;
