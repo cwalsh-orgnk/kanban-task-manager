@@ -7,7 +7,7 @@
   </div>
   <aside
     :class="[sidebarOpen ? activeClass : hiddenClass]"
-    class="top-24 left-0 pt-3"
+    class="top-20 top left-0 pt-6 border-r border-solid border-linesLight"
   >
     <span
       class="font-bold uppercase text-mediumGray text-xs w-full block mb-4 ml-8 tracking-widest"
@@ -15,28 +15,23 @@
     >
     <nav class="mr-6">
       <ul>
-        <li>
+        <li v-for="board in notes.boards" :key="board.name">
           <button
-            class="nav-item-active w-full pt-[15px] pb-[14px] pl-[24px] pr-[25px] text-center bg-mainPurple white m-0 flex items-center text-white rounded-r-full font-bold text-md"
+            :class="[
+              this.activeBoard === board.name
+                ? activeBoardClass
+                : hiddenBoardClass,
+            ]"
+            @click="showBoard(board.name)"
+            class="nav-item"
           >
-            <img class="mr-4" src="../assets/icon-board-white.svg" />
-            Platform Launch
-          </button>
-        </li>
-        <li>
-          <button
-            class="nav-item w-full pt-[15px] pb-[14px] pl-[24px] pr-[25px] text-cente white m-0 flex items-center text-mediumGray rounded-r-full font-bold text-md"
-          >
-            <img class="mr-4" src="../assets/icon-board.svg" />
-            Marketing Plan
-          </button>
-        </li>
-        <li>
-          <button
-            class="nav-item w-full pt-[15px] pb-[14px] pl-[24px] pr-[25px] text-cente white m-0 flex items-center text-mediumGray rounded-r-full font-bold text-md"
-          >
-            <img class="mr-4" src="../assets/icon-board.svg" />
-            Roadmap
+            <img
+              class="mr-4"
+              v-if="this.activeBoard == board.name"
+              src="../assets/icon-board-white.svg"
+            />
+            <img class="mr-4" v-else src="../assets/icon-board.svg" />
+            {{ board.name }}
           </button>
         </li>
         <li>
@@ -79,16 +74,18 @@ export default {
   },
   data() {
     return {
-      note: "Platform Launch",
-      sidebarVisible: false,
       activeClass:
         "aside position fixed w-[300px] bg-white h-[calc(100vh-96px()] top-24 left-0 sidebar-visible z-10 opacity-100",
       hiddenClass:
         "aside position fixed bg-white h-[100vh] top-24 left-0 opacity-0",
       showButton: "opacity-100",
       hideButton: "opacity-0",
-      logoPaddingRight: "pr-20",
+      logoPaddingRight: "pr-[5.2rem]",
       logoPaddingRightNone: "pr-8",
+      activeBoardClass:
+        "nav-item-active w-full pt-[15px] pb-[14px] pl-[24px] pr-[25px] text-center bg-mainPurple white m-0 flex items-center text-white rounded-r-full font-bold text-md",
+      hiddenBoardClass:
+        "nav-item w-full pt-[15px] pb-[14px] pl-[24px] pr-[25px] text-cente white m-0 flex items-center text-mediumGray rounded-r-full font-bold text-md",
     };
   },
   watch: {
@@ -102,6 +99,11 @@ export default {
   methods: {
     showSidebar() {
       this.sidebarOpen = !this.sidebarOpen;
+    },
+    showBoard(board) {
+      console.log(board);
+      console.log(this.activeBoard);
+      this.activeBoard = board;
     },
   },
   setup() {
@@ -120,7 +122,7 @@ button {
 }
 aside {
   transform: translate(-100%);
-  height: calc(100vh - 6rem);
+  height: calc(100vh - 5rem);
   transition: transform ease-in-out 0.3s, opacity ease-in-out 0.3s;
 }
 .sidebar-visible {
