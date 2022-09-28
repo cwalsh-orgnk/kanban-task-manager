@@ -11,6 +11,7 @@ import notes from "../data/data.json";
 const state = reactive({
   notes: notes,
   sidebarOpen: false,
+  activeBoard: null,
 });
 
 export default () => {
@@ -22,6 +23,10 @@ export default () => {
     return !state.sidebarOpen;
   };
 
+  const getActiveBoard = () => {
+    return !state.activeBoard;
+  };
+
   /**
    * Return the state as a `reference` to make it mutable.
    */
@@ -29,5 +34,6 @@ export default () => {
     state: toRefs(state),
     notesList,
     sidebarInView,
+    getActiveBoard,
   };
 };
