@@ -21,7 +21,7 @@ export default {
 <style>
 #app {
   max-height: 100vh;
-  overflow: hidden;
+  overflow: scroll;
   height: 100vh;
 }
 body {
