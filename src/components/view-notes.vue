@@ -3,12 +3,12 @@
     <div
       v-for="board in filteredNotesList"
       v-bind:key="board.name"
-      class="column-container flex m-6 mt-24 h-[100vh] overflow-scroll"
+      class="column-container flex m-6 mt-24 h-[calc(100vh-8rem)] min-w-[calc(100%-324px)] overflow-y-scroll"
     >
       <div
         v-for="column in board.columns"
         v-bind:key="column.name"
-        class="column w-1/5 mt-6"
+        class="column mt-6 max-w-[20%] w-full"
       >
         <h3 class="font-bold text-xs tracking-widest mb-6 text-mediumGray">
           {{ column.name }}
@@ -28,7 +28,7 @@
         </NoteCard>
       </div>
       <button
-        class="new-note w-1/5 rounded-md flex text-xl font-bold items-center justify-center text-mediumGray mt-16 max-w-[calc(100%-1rem)] h-[calc(100vh-8rem)]"
+        class="new-note max-w-[20%] w-full rounded-md flex text-xl font-bold items-center justify-center text-mediumGray mt-16 h-[calc(100vh-8rem)]"
       >
         + New Column
       </button>
