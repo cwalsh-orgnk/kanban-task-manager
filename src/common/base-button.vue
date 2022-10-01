@@ -1,6 +1,7 @@
 <template>
   <button
-    class="pt-[15px] pb-[14px] pl-[24px] pr-[25px] text-center bg-mainPurple white m-0 ml-auto flex text-white border rounded-full font-bold text-md mr-6"
+    :class="this.class"
+    class="pt-[15px] pb-[14px] pl-[24px] pr-[25px] text-center bg-mainPurple white m-0 ml-auto flex text-white rounded-full font-bold text-md mr-6 justify-center"
   >
     {{ buttonText }}
   </button>
@@ -10,6 +11,7 @@ export default {
   name: "BaseButton",
   props: {
     buttonText: String,
+    class: String,
   },
 };
 </script>
