@@ -1,15 +1,33 @@
 <template>
   <div
-    class="modal-backdrop fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center"
+    class="modal-backdrop fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50"
   >
-    <div
-      class="modal bg-white overflow-auto flex flex-col shadow-sm max-w-md w-full p-8 m-8"
-    >
+    <div class="modal bg-white flex flex-col shadow-sm max-w-md w-full p-8 m-8">
       <button type="button" class="btn-close" @click="close">x</button>
-      <header class="modal-header">
+      <header class="modal-header relative flex justify-between">
         <h3 class="title text-lg font-bold text-black">
           {{ task.title }}
         </h3>
+        <button type="button" class="btn-close" @click="options">
+          <img src="../assets/icon-vertical-ellipsis.svg" />
+        </button>
+        <div
+          class="tooltip absolute flex flex-col rounded-lg p-4 bottom-0 translate-y-full right-0 bg-white w-[192px] translate-x-1/2"
+          v-if="showOptions"
+        >
+          <button
+            class="text-mediumGray text-base font-medium text-left mb-4"
+            @click="edit"
+          >
+            Edit Task
+          </button>
+          <button
+            class="text-red text-base font-medium text-left"
+            @click="deleteTask"
+          >
+            Delete Task
+          </button>
+        </div>
       </header>
       <div v-if="task.description">
         <p class="text-base font-medium text-mediumGray mt-6">
@@ -18,7 +36,7 @@
       </div>
 
       <section class="tasks">
-        <h5 class="text-xs text-mediumGray font-bold mt-6">
+        <h5 class="text-xs text-mediumGray font-bold mt-6 mb-4">
           {{ completedTasks }}
         </h5>
         <ul v-for="subtask in task.subtasks" v-bind:key="subtask.title">
@@ -73,6 +91,7 @@ export default {
   name: "NoteDetails",
   emits: {
     taskUpdated: false,
+    editModal: false,
   },
   props: {
     task: Object,
@@ -84,6 +103,8 @@ export default {
       isCompleted: "text-mediumGray line-through",
       notCompleted: "",
       status: this.task.status,
+      showOptions: false,
+      showEditTask: false,
     };
   },
   computed: {
@@ -105,6 +126,16 @@ export default {
         this.$emit("taskUpdated", true);
       }
       this.$emit("close");
+    },
+    options() {
+      this.showOptions = !this.showOptions;
+    },
+    edit() {
+      this.showOptions = false;
+      this.$emit("edit");
+    },
+    deleteTask() {
+      return false;
     },
     check(subtask) {
       subtask.isCompleted = !subtask.isCompleted;
