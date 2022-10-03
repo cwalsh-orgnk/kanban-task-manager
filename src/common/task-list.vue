@@ -3,7 +3,7 @@
     <div
       v-for="board in filteredTasksList"
       v-bind:key="board.name"
-      class="column-container flex m-6 mt-24 h-[calc(100vh-8rem)] min-w-[calc(100%-324px)] overflow-y-scroll"
+      class="column-container flex p-6 mt-24 h-[calc(100vh-8rem)] overflow-y-scroll"
     >
       <div
         v-for="column in board.columns"
@@ -47,7 +47,8 @@ export default {
   },
   data() {
     return {
-      activeClass: "list-container sidebar-active relative left-[324px]",
+      activeClass:
+        "list-container sidebar-active relative left-[324px] max-w-[calc(100%-324px)]",
       hiddenClass: "list-container sidebar-hidden ml-6 left-0",
     };
   },
