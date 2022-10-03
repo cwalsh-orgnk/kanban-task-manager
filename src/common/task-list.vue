@@ -8,7 +8,7 @@
       <div
         v-for="column in board.columns"
         v-bind:key="column.name"
-        class="column mt-6 max-w-[20%] w-full"
+        class="column mt-6 w-[280px] min-w-[280px]"
       >
         <h3 class="font-bold text-xs tracking-widest mb-6 text-mediumGray">
           {{ column.name }}
@@ -28,7 +28,7 @@
         </TaskCard>
       </div>
       <button
-        class="new-task max-w-[20%] w-full rounded-md flex text-xl font-bold items-center justify-center text-mediumGray mt-16 h-[calc(100vh-8rem)]"
+        class="new-task w-[280px] min-w-[280px] rounded-md flex text-xl font-bold items-center justify-center text-mediumGray mt-16 h-[calc(100vh-8rem)]"
       >
         + New Column
       </button>
@@ -47,8 +47,8 @@ export default {
   },
   data() {
     return {
-      activeClass: "sidebar-active relative left-[324px]",
-      hiddenClass: "sidebar-hidden ml-6 left-0",
+      activeClass: "list-container sidebar-active relative left-[324px]",
+      hiddenClass: "list-container sidebar-hidden ml-6 left-0",
     };
   },
   computed: {
@@ -98,11 +98,13 @@ export default {
 </script>
 
 <style scoped>
+.list-container {
+  transition: left ease-in-out 0.3s;
+}
 .column-container {
   display: flex;
   width: 100%;
   justify-self: flex-end;
-  transition: margin ease-in-out 0.3s left ease-in-out 0.3s;
 }
 .new-task {
   background: linear-gradient(
