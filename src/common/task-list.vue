@@ -1,7 +1,7 @@
 <template>
   <div :class="[sidebarOpen ? activeClass : hiddenClass]">
     <div
-      v-for="board in filteredNotesList"
+      v-for="board in filteredTasksList"
       v-bind:key="board.name"
       class="column-container flex m-6 mt-24 h-[calc(100vh-8rem)] min-w-[calc(100%-324px)] overflow-y-scroll"
     >
@@ -13,22 +13,22 @@
         <h3 class="font-bold text-xs tracking-widest mb-6 text-mediumGray">
           {{ column.name }}
         </h3>
-        <NoteCard
+        <TaskCard
           v-for="task in column.tasks"
           :key="task.title"
           :task="task"
-          :filteredNotesList="filteredNotesList"
+          :filteredTasksList="filteredTasksList"
           @listUpdated="updateList"
-          class="note py-6 px-4 flex flex-col justify-center items-start text-left bg-white mb-5 rounded-lg w-full max-w-[calc(100%-1rem)] shadow"
+          class="task py-6 px-4 flex flex-col justify-center items-start text-left bg-white mb-5 rounded-lg w-full max-w-[calc(100%-1rem)] shadow"
         >
           <h4 class="text-md font-bold textBlack">{{ task.title }}</h4>
           <h5 class="text-xs text-mediumGray font-bold mt-1">
             {{ calculateCompletedTasks(task) }}
           </h5>
-        </NoteCard>
+        </TaskCard>
       </div>
       <button
-        class="new-note max-w-[20%] w-full rounded-md flex text-xl font-bold items-center justify-center text-mediumGray mt-16 h-[calc(100vh-8rem)]"
+        class="new-task max-w-[20%] w-full rounded-md flex text-xl font-bold items-center justify-center text-mediumGray mt-16 h-[calc(100vh-8rem)]"
       >
         + New Column
       </button>
@@ -38,12 +38,12 @@
 
 <script>
 import store from "../store/store.js";
-import NoteCard from "../common/note-card.vue";
+import TaskCard from "./task-card.vue";
 
 export default {
-  name: "ViewNotes",
+  name: "TasksList",
   components: {
-    NoteCard,
+    TaskCard,
   },
   data() {
     return {
@@ -52,23 +52,23 @@ export default {
     };
   },
   computed: {
-    filteredNotesList() {
-      const filteredNotes = this.notes.boards.filter((val) =>
+    filteredTasksList() {
+      const filteredTasks = this.tasks.boards.filter((val) =>
         val.name.includes(this.activeBoard)
       );
-      return filteredNotes;
+      return filteredTasks;
     },
   },
   methods: {
     updateList(task) {
-      this.filteredNotesList[0].columns.forEach((element) => {
+      this.filteredTasksList[0].columns.forEach((element) => {
         element.tasks.forEach((childElement, i, object) => {
           if (childElement.title === task.title) {
             object.splice(i, 1);
           }
         });
       });
-      this.filteredNotesList[0].columns.forEach((element, i, object) => {
+      this.filteredTasksList[0].columns.forEach((element, i, object) => {
         console.log(element.name);
         console.log(task.status);
         if (element.name === task.status) {
@@ -104,7 +104,7 @@ export default {
   justify-self: flex-end;
   transition: margin ease-in-out 0.3s left ease-in-out 0.3s;
 }
-.new-note {
+.new-task {
   background: linear-gradient(
     180deg,
     #e9effa 0%,

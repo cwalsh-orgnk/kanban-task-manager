@@ -88,7 +88,7 @@
 </template>
 <script>
 export default {
-  name: "NoteDetails",
+  name: "TaskDetails",
   emits: {
     taskUpdated: false,
     editModal: false,
@@ -96,7 +96,7 @@ export default {
   props: {
     task: Object,
     completedTasks: String,
-    filteredNotesList: Array,
+    filteredTasksList: Array,
   },
   data() {
     return {
@@ -110,7 +110,7 @@ export default {
   computed: {
     filteredStatusList() {
       const availableStatus = [];
-      this.filteredNotesList[0].columns.forEach((element) => {
+      this.filteredTasksList[0].columns.forEach((element) => {
         if (this.task.status != element.name) {
           availableStatus.push(element.name);
         }

@@ -1,5 +1,5 @@
 import { reactive, toRefs } from "@vue/reactivity";
-import notes from "../data/data.json";
+import tasks from "../data/data.json";
 
 /**
  * Define our state
@@ -9,14 +9,14 @@ import notes from "../data/data.json";
  * it will not mutate.
  */
 const state = reactive({
-  notes: notes,
+  tasks: tasks,
   sidebarOpen: false,
   activeBoard: null,
 });
 
 export default () => {
-  const notesList = () => {
-    return state.notes;
+  const tasksList = () => {
+    return state.tasks;
   };
 
   const sidebarInView = () => {
@@ -32,7 +32,7 @@ export default () => {
    */
   return {
     state: toRefs(state),
-    notesList,
+    tasksList,
     sidebarInView,
     getActiveBoard,
   };

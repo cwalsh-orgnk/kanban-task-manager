@@ -24,7 +24,7 @@
   // breakpoint(xs,0)       		Setting only a min-width breakpoint
   // breakpoint(0,xs)       		Setting only a max-width breakpoint
   // breakpoint(xs,md)   			Setting a min-width and max-width breakpoint
-  // Note: any predefined breakpoints passed to the max property will have 1px subtracted
+  // Task: any predefined breakpoints passed to the max property will have 1px subtracted
   // Any custom px values passed will apply to both min and max properties without being modified
 
   @mixin breakpoint($min: 0, $max: 0, $unit: px) {
@@ -109,7 +109,7 @@
   // Accepts a list of strings and organises their output
   // You can include whatever properties you need for each selector and this mixin will determine when to use default properties
   // For example: transition(color 5s linear, box-shadow) will return "transition: color 5s linear, box-shadow 0.3s ease-in-out"
-  // Note: you must write each argument string in the exact order you would for a normal CSS transition property e.g. prop duration easing delay
+  // Task: you must write each argument string in the exact order you would for a normal CSS transition property e.g. prop duration easing delay
   // So if you need to only change you duration then you would include transition(all 0.5s)
 
   @mixin transition($transitions...) {

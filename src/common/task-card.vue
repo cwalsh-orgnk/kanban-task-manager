@@ -1,6 +1,6 @@
 <template>
   <button
-    class="note py-6 px-4 flex flex-col justify-center items-start text-left bg-white mb-5 rounded-lg w-full max-w-[calc(100%-1rem)] shadow"
+    class="task py-6 px-4 flex flex-col justify-center items-start text-left bg-white mb-5 rounded-lg w-full max-w-[calc(100%-1rem)] shadow"
     @click="showModal"
   >
     <h4 class="text-md font-bold text-black max-w-[250px]">{{ task.title }}</h4>
@@ -8,7 +8,7 @@
       {{ calculateCompletedTasks(task) }}
     </h5>
   </button>
-  <NoteDetails
+  <TaskDetails
     v-show="isDetailsModalVisible"
     @close="closeModal"
     @edit="editModal"
@@ -16,9 +16,9 @@
     :key="task.title"
     :completedTasks="calculateCompletedTasks(task)"
     @taskUpdated="hasTaskUpdated"
-    :filteredNotesList="filteredNotesList"
+    :filteredTasksList="filteredTasksList"
   />
-  <NoteEditDetails
+  <TaskEditDetails
     v-show="isEditModalVisible"
     @close="closeModal"
     @edit="editModal"
@@ -26,26 +26,26 @@
     :key="task.title"
     :completedTasks="calculateCompletedTasks(task)"
     @taskUpdated="hasTaskUpdated"
-    :filteredNotesList="filteredNotesList"
+    :filteredTasksList="filteredTasksList"
   />
 </template>
 
 <script>
-import NoteDetails from "./modal-note-details.vue";
-import NoteEditDetails from "./modal-note-edit-details.vue";
+import TaskDetails from "./modal-view-task.vue";
+import TaskEditDetails from "./modal-edit-task.vue";
 
 export default {
-  name: "NoteCard",
+  name: "TaskCard",
   components: {
-    NoteDetails,
-    NoteEditDetails,
+    TaskDetails,
+    TaskEditDetails,
   },
   emits: {
     listUpdated: false,
   },
   props: {
     task: Object,
-    filteredNotesList: Array,
+    filteredTasksList: Array,
   },
   data() {
     return {
@@ -64,7 +64,7 @@ export default {
       });
       return `${counter} of ${tasks.subtasks.length} subtasks`;
     },
-    openNote(task) {
+    openTask(task) {
       return task;
     },
     showModal() {

@@ -15,7 +15,7 @@
     >
     <nav class="mr-6">
       <ul>
-        <li v-for="board in notes.boards" :key="board.name">
+        <li v-for="board in tasks.boards" :key="board.name">
           <button
             :class="[
               this.activeBoard === board.name

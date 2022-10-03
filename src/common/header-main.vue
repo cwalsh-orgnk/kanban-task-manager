@@ -3,7 +3,7 @@
     class="fixed w-full top-o bg-white z-50 h-24 flex items-center px-10 overflow-hidden top-0 border-b border-solid border-linesLight"
   >
     <NavSidebar />
-    <h1 class="text-xl black font-bold" v-if="note">{{ note }}</h1>
+    <h1 class="text-xl black font-bold" v-if="task">{{ task }}</h1>
     <BaseButton
       :buttonText="'+ Add New Task'"
       :class="this.addTaskButtonClass"
@@ -13,16 +13,16 @@
       <img alt="Vue logo" src="../assets/icon-vertical-ellipsis.svg" />
     </button>
   </header>
-  <NoteAddNew
+  <TaskAddNew
     v-show="isAddNewModalVisible"
     @close="closeModal"
-    :filteredNotesList="filteredNotesList"
+    :filteredTasksList="filteredTasksList"
   />
 </template>
 <script>
 import BaseButton from "../common/base-button.vue";
 import NavSidebar from "../common/nav-sidebar.vue";
-import NoteAddNew from "../common/modal-note-add-new.vue";
+import TaskAddNew from "./modal-add-task.vue";
 import store from "../store/store.js";
 
 export default {
@@ -30,14 +30,14 @@ export default {
   components: {
     BaseButton,
     NavSidebar,
-    NoteAddNew,
+    TaskAddNew,
   },
   props: {
     msg: String,
   },
   data() {
     return {
-      note: "Platform Launch",
+      task: "Platform Launch",
       isAddNewModalVisible: false,
     };
   },
@@ -45,11 +45,11 @@ export default {
     addTaskButtonClass() {
       return this.activeBoard === null ? "opacity-25" : "active";
     },
-    filteredNotesList() {
-      const filteredNotes = this.notes.boards.filter((val) =>
+    filteredTasksList() {
+      const filteredTasks = this.tasks.boards.filter((val) =>
         val.name.includes(this.activeBoard)
       );
-      return filteredNotes;
+      return filteredTasks;
     },
   },
   methods: {
