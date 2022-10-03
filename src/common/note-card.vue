@@ -83,7 +83,6 @@ export default {
       if (this.taskUpdated === true) {
         this.$emit("listUpdated", this.task);
       }
-      console.log("test");
       this.isDetailsModalVisible = false;
       this.isEditModalVisible = true;
     },
