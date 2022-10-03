@@ -31,8 +31,8 @@
 </template>
 
 <script>
-import NoteDetails from "../common/note-details.vue";
-import NoteEditDetails from "../common/note-edit-details.vue";
+import NoteDetails from "./modal-note-details.vue";
+import NoteEditDetails from "./modal-note-edit-details.vue";
 
 export default {
   name: "NoteCard",

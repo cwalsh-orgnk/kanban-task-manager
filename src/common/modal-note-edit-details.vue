@@ -81,7 +81,7 @@
   </div>
 </template>
 <script>
-import BaseButton from "../common/base-button.vue";
+import BaseButton from "./base-button.vue";
 
 export default {
   name: "NoteDetails",

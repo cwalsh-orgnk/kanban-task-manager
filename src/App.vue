@@ -1,19 +1,19 @@
 <template>
   <div class="app-wrapper">
     <HeaderMain />
-    <ViewNotes />
+    <NotesList />
   </div>
 </template>
 
 <script>
 import HeaderMain from "./common/header-main.vue";
-import ViewNotes from "./components/view-notes.vue";
+import NotesList from "./common/notes-list.vue";
 
 export default {
   name: "App",
   components: {
     HeaderMain,
-    ViewNotes,
+    NotesList,
   },
 };
 </script>
