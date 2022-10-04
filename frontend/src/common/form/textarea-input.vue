@@ -1,23 +1,24 @@
 <template>
   <label
-    v-if="this.label"
-    for="title"
+    for="description"
+    :class="labelClass"
     class="text-xs text-mediumGray font-bold mb-2"
     >{{ label }}</label
   >
-  <input
-    type="text"
-    name="title"
-    :value="value"
-    :class="inputClass"
+  <textarea
+    :name="label"
+    rows="4"
     class="w-full border border-linesLight border-opacity-80 py-2 px-4 text-base font-medium text-black rounded"
+    :value="value"
+    :placeholder="placeholder"
   />
 </template>
 <script>
 export default {
-  name: "TextInput",
+  name: "SelectInput",
   props: {
     label: String,
+    name: String,
     labelClass: String,
     inputClass: String,
     value: String,
@@ -25,6 +26,3 @@ export default {
   },
 };
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped></style>

@@ -1,6 +1,6 @@
 <template>
   <header
-    class="fixed w-full top-o bg-white z-50 h-24 flex items-center px-10 overflow-hidden top-0 border-b border-solid border-linesLight"
+    class="fixed w-full top-o bg-white z-50 h-24 flex items-center px-10 top-0 border-b border-solid border-linesLight"
   >
     <NavSidebar />
     <h1 class="text-xl black font-bold" v-if="task">{{ task }}</h1>
@@ -9,13 +9,21 @@
       :class="this.addTaskButtonClass"
       @click="showModal"
     />
-    <button class="flex">
-      <img alt="Vue logo" src="../assets/icon-vertical-ellipsis.svg" />
-    </button>
+    <div class="tooltip-wrap relative">
+      <button type="button" class="btn-close" @click="options">
+        <img src="../assets/icon-vertical-ellipsis.svg" />
+      </button>
+      <EditDelete
+        v-show="this.showOptions"
+        :editLabel="'Edit Board'"
+        :deleteLabel="'Delete Board'"
+        @edit="editItem"
+        @delete="deleteItem"
+      />
+    </div>
   </header>
   <TaskAddNew
     v-show="isAddNewModalVisible"
-    @close="closeModal"
     :filteredTasksList="filteredTasksList"
   />
 </template>
@@ -23,6 +31,7 @@
 import BaseButton from "../common/base-button.vue";
 import NavSidebar from "../common/nav-sidebar.vue";
 import TaskAddNew from "./modals/modal-add-task.vue";
+import EditDelete from "./tooltips/EditDelete.vue";
 import store from "../store/store.js";
 
 export default {
@@ -31,6 +40,7 @@ export default {
     BaseButton,
     NavSidebar,
     TaskAddNew,
+    EditDelete,
   },
   props: {
     msg: String,
@@ -39,6 +49,7 @@ export default {
     return {
       task: "Platform Launch",
       isAddNewModalVisible: false,
+      showOptions: false,
     };
   },
   computed: {
@@ -55,6 +66,17 @@ export default {
   methods: {
     showModal() {
       this.isAddNewModalVisible = true;
+    },
+    options() {
+      this.showOptions = !this.showOptions;
+    },
+    editItem() {
+      this.showOptions = false;
+      this.$emit("edit");
+    },
+    deleteItem() {
+      this.showOptions = false;
+      this.$emit("edit");
     },
   },
   setup() {

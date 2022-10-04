@@ -1,5 +1,6 @@
 <template>
   <select
+    :name="name"
     class="product-filter-select relative w-full border border-linesLight h-[40px] px-4 pr-10"
   >
     <option v-if="defaultOption" :value="defaultOption">

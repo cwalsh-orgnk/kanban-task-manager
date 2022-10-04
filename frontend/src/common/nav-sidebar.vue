@@ -1,6 +1,6 @@
 <template>
   <div
-    class="logo relative ml-6 mr-8"
+    class="logo flex relative ml-6 mr-8 items-center h-full"
     :class="[sidebarOpen ? logoPaddingRight : logoPaddingRightNone]"
   >
     <img src="../assets/logo-dark.svg" />
@@ -141,9 +141,9 @@ aside {
   right: 0;
   z-index: 111;
   width: 1px;
-  height: 200vh;
+  height: 100%;
   overflow: hidden;
   position: absolute;
-  top: -100vh;
+  top: 0;
 }
 </style>

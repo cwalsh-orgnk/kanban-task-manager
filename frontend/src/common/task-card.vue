@@ -10,25 +10,25 @@
   </button>
   <transition name="slide-fade">
     <TaskDetails
-      v-show="isDetailsModalVisible"
-      @close="closeModal"
+      v-if="isDetailsModalVisible"
+      @close="closeDetailsModal"
       @edit="editModal"
       :task="task"
       :key="task.title"
       :completedTasks="calculateCompletedTasks(task)"
-      @taskUpdated="hasTaskUpdated"
+      @listUpdated="haslistUpdated"
       :filteredTasksList="filteredTasksList"
     />
   </transition>
   <transition name="slide-fade">
     <TaskEditDetails
-      v-show="isEditModalVisible"
-      @close="closeModal"
+      v-if="isEditModalVisible"
+      @close="closeEditModal"
       @edit="editModal"
       :task="task"
       :key="task.title"
       :completedTasks="calculateCompletedTasks(task)"
-      @taskUpdated="hasTaskUpdated"
+      @listUpdated="haslistUpdated"
       :filteredTasksList="filteredTasksList"
     />
   </transition>
@@ -55,7 +55,7 @@ export default {
     return {
       isDetailsModalVisible: false,
       isEditModalVisible: false,
-      taskUpdated: false,
+      listUpdated: false,
     };
   },
   methods: {
@@ -74,17 +74,23 @@ export default {
     showModal() {
       this.isDetailsModalVisible = true;
     },
-    hasTaskUpdated(hasTaskUpdated) {
-      this.taskUpdated = hasTaskUpdated;
+    haslistUpdated(haslistUpdated) {
+      this.listUpdated = haslistUpdated;
     },
-    closeModal() {
-      if (this.taskUpdated === true) {
+    closeDetailsModal() {
+      if (this.listUpdated === true) {
         this.$emit("listUpdated", this.task);
       }
       this.isDetailsModalVisible = false;
     },
+    closeEditModal() {
+      if (this.listUpdated === true) {
+        this.$emit("listUpdated", this.task);
+      }
+      this.isEditModalVisible = false;
+    },
     editModal() {
-      if (this.taskUpdated === true) {
+      if (this.listUpdated === true) {
         this.$emit("listUpdated", this.task);
       }
       this.isDetailsModalVisible = false;

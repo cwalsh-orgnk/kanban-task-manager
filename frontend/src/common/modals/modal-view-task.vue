@@ -1,9 +1,12 @@
 <template>
   <div
     class="modal-backdrop fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50"
+    @click="close"
   >
-    <div class="modal bg-white flex flex-col shadow-sm max-w-md w-full p-8 m-8">
-      <button type="button" class="btn-close" @click="close">x</button>
+    <div
+      class="modal bg-white flex flex-col shadow-sm max-w-md w-full p-8 m-8 z-90"
+      @click.stop
+    >
       <header class="modal-header relative flex justify-between">
         <h3 class="title text-lg font-bold text-black">
           {{ task.title }}
@@ -11,23 +14,13 @@
         <button type="button" class="btn-close" @click="options">
           <img src="../../assets/icon-vertical-ellipsis.svg" />
         </button>
-        <div
-          class="tooltip absolute flex flex-col rounded-lg p-4 bottom-0 translate-y-full right-0 bg-white w-[192px] translate-x-1/2"
-          v-if="showOptions"
-        >
-          <button
-            class="text-mediumGray text-base font-medium text-left mb-4"
-            @click="edit"
-          >
-            Edit Task
-          </button>
-          <button
-            class="text-red text-base font-medium text-left"
-            @click="deleteTask"
-          >
-            Delete Task
-          </button>
-        </div>
+        <EditDelete
+          v-show="this.showOptions"
+          :editLabel="'Edit Task'"
+          :deleteLabel="'Delete Task'"
+          @edit="editItem"
+          @delete="deleteItem"
+        />
       </header>
       <div v-if="task.description">
         <p class="text-base font-medium text-mediumGray mt-6">
@@ -41,22 +34,14 @@
         </h5>
         <ul v-for="subtask in task.subtasks" v-bind:key="subtask.title">
           <li class="flex items-center bg-lightGray p-3 mb-3">
-            <div class="checkbox-group">
-              <input
-                type="checkbox"
-                :name="task.title"
-                :id="task.title + '-' + subtask.title"
-                :checked="subtask.isCompleted"
-                @change="check(subtask)"
-              />
-              <label
-                :for="task.title + '-' + subtask.title"
-                :class="[subtask.isCompleted ? isCompleted : notCompleted]"
-                class="text-base font-bold"
-              >
-                {{ subtask.title }}
-              </label>
-            </div>
+            <CheckboxInput
+              :inputName="task.title"
+              :inputId="task.title + '-' + subtask.title"
+              :checked="subtask.isCompleted"
+              :inputClass="[subtask.isCompleted ? isCompleted : notCompleted]"
+              @change="check(subtask)"
+              :inputLabel="subtask.title"
+            />
           </li>
         </ul>
       </section>
@@ -65,32 +50,29 @@
           Current Status
         </h5>
         <div class="select-wrapper">
-          <select
-            :id="task.title"
-            class="product-filter-select relative w-full border border-linesLight h-[40px] px-4 pr-10"
+          <SelectInput
             @change="selected(task, $event)"
-          >
-            <option :value="task.status">
-              {{ task.status }}
-            </option>
-            <option
-              v-for="status in filteredStatusList"
-              v-bind:key="status"
-              :value="status"
-            >
-              {{ status }}
-            </option>
-          </select>
+            :defaultOption="task.status"
+            :options="filteredStatusList"
+          />
         </div>
       </section>
     </div>
   </div>
 </template>
 <script>
+import SelectInput from "../form/select-input.vue";
+import CheckboxInput from "../form/checkbox-input.vue";
+import EditDelete from "../tooltips/EditDelete.vue";
 export default {
   name: "TaskDetails",
+  components: {
+    SelectInput,
+    CheckboxInput,
+    EditDelete,
+  },
   emits: {
-    taskUpdated: false,
+    listUpdated: false,
     editModal: false,
   },
   props: {
@@ -121,20 +103,20 @@ export default {
   methods: {
     close() {
       if (this.status === this.task.status) {
-        this.$emit("taskUpdated", false);
+        this.$emit("listUpdated", false);
       } else {
-        this.$emit("taskUpdated", true);
+        this.$emit("listUpdated", true);
       }
       this.$emit("close");
     },
     options() {
       this.showOptions = !this.showOptions;
     },
-    edit() {
+    editItem() {
       this.showOptions = false;
       this.$emit("edit");
     },
-    deleteTask() {
+    deleteItem() {
       return false;
     },
     check(subtask) {

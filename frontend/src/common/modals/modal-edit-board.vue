@@ -1,8 +1,12 @@
 <template>
   <div
     class="modal-backdrop fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50"
+    @click="close"
   >
-    <div class="modal bg-white flex flex-col shadow-sm max-w-lg w-full p-8 m-8">
+    <div
+      class="modal bg-white flex flex-col shadow-sm max-w-lg w-full p-8 m-8"
+      @click.stop
+    >
       <header class="modal-header relative mb-6">
         <h3 class="title text-lg font-bold text-black">Add New Board</h3>
       </header>
@@ -42,7 +46,7 @@
             :value="'Doing'"
           />
           <button class="text-mediumGray">
-            <img src="../../assets/icon-cross.svg" />
+            <img src="../../../assets/icon-cross.svg" />
           </button>
         </div>
       </div>
@@ -64,13 +68,10 @@ export default {
     BaseButton,
   },
   emits: {
-    taskUpdated: false,
-    editModal: false,
+    boardUpdated: false,
   },
   props: {
-    task: Object,
-    completedTasks: String,
-    filteredTasksList: Array,
+    board: Object,
   },
   data() {
     return {
@@ -92,28 +93,10 @@ export default {
   },
   methods: {
     close() {
-      if (this.status === this.task.status) {
-        this.$emit("taskUpdated", false);
-      } else {
-        this.$emit("taskUpdated", true);
-      }
       this.$emit("close");
     },
-    options() {
-      this.showOptions = !this.showOptions;
-    },
-    edit() {
-      this.showOptions = false;
-      this.$emit("edit");
-    },
-    deleteTask() {
+    deleteColumn() {
       return false;
-    },
-    check(subtask) {
-      subtask.isCompleted = !subtask.isCompleted;
-    },
-    selected(task, event) {
-      task.status = event.target.value;
     },
   },
   setup() {
@@ -125,5 +108,5 @@ export default {
 };
 </script>
 <style lang="scss">
-@import "../assets/base.scss";
+@import "../../assets/base.scss";
 </style>

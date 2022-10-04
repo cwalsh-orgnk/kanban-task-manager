@@ -43,8 +43,8 @@ export default {
   data() {
     return {
       activeClass:
-        "list-container sidebar-active relative left-[324px] max-w-[calc(100%-324px)]",
-      hiddenClass: "list-container sidebar-hidden ml-6 left-0",
+        "list-container sidebar-active relative left-[300px] max-w-[calc(100%-300px)]",
+      hiddenClass: "list-container sidebar-hidden left-0",
     };
   },
   computed: {
@@ -65,10 +65,7 @@ export default {
         });
       });
       this.filteredTasksList[0].columns.forEach((element, i, object) => {
-        console.log(element.name);
-        console.log(task.status);
         if (element.name === task.status) {
-          console.log(i);
           object[i].tasks.push(task);
           return;
         }
