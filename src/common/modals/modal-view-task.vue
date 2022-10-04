@@ -9,7 +9,7 @@
           {{ task.title }}
         </h3>
         <button type="button" class="btn-close" @click="options">
-          <img src="../assets/icon-vertical-ellipsis.svg" />
+          <img src="../../assets/icon-vertical-ellipsis.svg" />
         </button>
         <div
           class="tooltip absolute flex flex-col rounded-lg p-4 bottom-0 translate-y-full right-0 bg-white w-[192px] translate-x-1/2"
@@ -147,5 +147,5 @@ export default {
 };
 </script>
 <style lang="scss">
-@import "../assets/base.scss";
+@import "../../assets/base.scss";
 </style>

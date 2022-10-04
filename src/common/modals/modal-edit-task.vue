@@ -4,64 +4,64 @@
   >
     <div class="modal bg-white flex flex-col shadow-sm max-w-lg w-full p-8 m-8">
       <header class="modal-header relative mb-6">
-        <h3 class="title text-lg font-bold text-black">Add New Board</h3>
+        <h3 class="title text-lg font-bold text-black">Edit Task</h3>
       </header>
       <div class="input-group flex flex-col mb-6">
-        <label for="title" class="text-xs text-mediumGray font-bold mb-2"
-          >Name</label
-        >
-        <input
-          type="text"
-          name="title"
-          placeholder="e.g. Web Design"
-          class="w-full border border-linesLight border-opacity-80 py-2 px-4 text-base font-medium text-black rounded"
+        <TextInput :label="'Title'" :value="task.title" />
+      </div>
+      <div class="input-group flex flex-col mb-6">
+        <TextArea
+          :label="'Description'"
+          :value="task.description"
+          :placeholder="'e.g. It’s always good to take a break. This 15 minute break will recharge the batteries a little.'"
         />
       </div>
       <div class="input-group flex flex-col">
         <label for="subtask" class="text-xs text-mediumGray font-bold mb-2"
-          >Columns</label
+          >Subtasks</label
         >
-        <div class="input-wrap flex mb-3 items-center">
-          <input
-            type="text"
-            name="subtask"
-            class="w-full border border-linesLight border-opacity-80 py-2 px-4 text-base font-medium text-black rounded mr-4"
-            :placeholder="'e.g. Make coffee'"
-            :value="'Todo'"
-          />
-          <button class="text-mediumGray">
-            <img src="../assets/icon-cross.svg" />
-          </button>
-        </div>
-        <div class="input-wrap flex mb-3 items-center">
-          <input
-            type="text"
-            name="subtask"
-            class="w-full border border-linesLight border-opacity-80 py-2 px-4 text-base font-medium text-black rounded mr-4"
-            :placeholder="'e.g. Drink coffee & smile'"
-            :value="'Doing'"
-          />
-          <button class="text-mediumGray">
-            <img src="../assets/icon-cross.svg" />
-          </button>
+        <div
+          class="input-wrap flex mb-3 items-center"
+          v-for="subtask in task.subtasks"
+          v-bind:key="subtask.title"
+        >
+          <TextInput :value="subtask.title" :inputClass="'mr-4'" />
+          <RemoveButton />
         </div>
       </div>
       <BaseButton
-        :buttonText="'+ Add New Column'"
+        :buttonText="'+ Add New Subtask'"
         :class="'w-full text-mainPurple bg-mainPurple bg-opacity-10'"
       />
-      <BaseButton :buttonText="'Create New Board'" :class="'w-full'" />
+      <h5 class="text-xs text-mediumGray font-bold mt-6 mb-2">
+        Current Status
+      </h5>
+      <div class="select-wrapper mb-6">
+        <SelectInput
+          @change="selected(task, $event)"
+          :defaultOption="task.status"
+          :options="filteredStatusList"
+        />
+      </div>
+      <BaseButton :buttonText="'Save Changes'" :class="'w-full'" />
     </div>
   </div>
 </template>
 <script>
-import BaseButton from "./base-button.vue";
-import store from "../store/store.js";
+import BaseButton from "../base-button.vue";
+import TextInput from "../form/text-input.vue";
+import TextArea from "../form/textarea-input.vue";
+import SelectInput from "../form/select-input.vue";
+import RemoveButton from "../buttons/remove-button.vue";
 
 export default {
-  name: "TaskAddNew",
+  name: "TaskDetails",
   components: {
     BaseButton,
+    TextInput,
+    TextArea,
+    SelectInput,
+    RemoveButton,
   },
   emits: {
     taskUpdated: false,
@@ -76,16 +76,18 @@ export default {
     return {
       isCompleted: "text-mediumGray line-through",
       notCompleted: "",
+      status: this.task.status,
       showOptions: false,
       showEditTask: false,
     };
   },
   computed: {
     filteredStatusList() {
-      if (this.activeBoard === null) return;
       const availableStatus = [];
       this.filteredTasksList[0].columns.forEach((element) => {
-        availableStatus.push(element.name);
+        if (this.task.status != element.name) {
+          availableStatus.push(element.name);
+        }
       });
       return availableStatus;
     },
@@ -116,14 +118,8 @@ export default {
       task.status = event.target.value;
     },
   },
-  setup() {
-    const { state } = store();
-    return {
-      ...state,
-    };
-  },
 };
 </script>
 <style lang="scss">
-@import "../assets/base.scss";
+@import "../../assets/base.scss";
 </style>

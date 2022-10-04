@@ -20,12 +20,7 @@
           :filteredTasksList="filteredTasksList"
           @listUpdated="updateList"
           class="task py-6 px-4 flex flex-col justify-center items-start text-left bg-white mb-5 rounded-lg w-full max-w-[calc(100%-1rem)] shadow"
-        >
-          <h4 class="text-md font-bold textBlack">{{ task.title }}</h4>
-          <h5 class="text-xs text-mediumGray font-bold mt-1">
-            {{ calculateCompletedTasks(task) }}
-          </h5>
-        </TaskCard>
+        ></TaskCard>
       </div>
       <button
         class="new-task w-[280px] min-w-[280px] rounded-md flex text-xl font-bold items-center justify-center text-mediumGray mt-16 h-[calc(100vh-8rem)]"
@@ -113,5 +108,21 @@ export default {
     #e9effa 0%,
     rgba(233, 239, 250, 0.5) 100%
   );
+}
+/*
+  Enter and leave animations can use different
+  durations and timing functions.
+*/
+.slide-fade-enter-active {
+  transition: all 0.3s ease-out;
+}
+
+.slide-fade-leave-active {
+  transition: all 0.3s cubic-bezier(1, 0.5, 0.8, 1);
+}
+
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+  opacity: 0;
 }
 </style>

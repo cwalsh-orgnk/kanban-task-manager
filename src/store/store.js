@@ -11,7 +11,7 @@ import tasks from "../data/data.json";
 const state = reactive({
   tasks: tasks,
   sidebarOpen: false,
-  activeBoard: null,
+  activeBoard: tasks.boards[0].name,
 });
 
 export default () => {

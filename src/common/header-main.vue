@@ -22,7 +22,7 @@
 <script>
 import BaseButton from "../common/base-button.vue";
 import NavSidebar from "../common/nav-sidebar.vue";
-import TaskAddNew from "./modal-add-task.vue";
+import TaskAddNew from "./modals/modal-add-task.vue";
 import store from "../store/store.js";
 
 export default {

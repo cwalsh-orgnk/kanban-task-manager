@@ -8,31 +8,35 @@
       {{ calculateCompletedTasks(task) }}
     </h5>
   </button>
-  <TaskDetails
-    v-show="isDetailsModalVisible"
-    @close="closeModal"
-    @edit="editModal"
-    :task="task"
-    :key="task.title"
-    :completedTasks="calculateCompletedTasks(task)"
-    @taskUpdated="hasTaskUpdated"
-    :filteredTasksList="filteredTasksList"
-  />
-  <TaskEditDetails
-    v-show="isEditModalVisible"
-    @close="closeModal"
-    @edit="editModal"
-    :task="task"
-    :key="task.title"
-    :completedTasks="calculateCompletedTasks(task)"
-    @taskUpdated="hasTaskUpdated"
-    :filteredTasksList="filteredTasksList"
-  />
+  <transition name="slide-fade">
+    <TaskDetails
+      v-show="isDetailsModalVisible"
+      @close="closeModal"
+      @edit="editModal"
+      :task="task"
+      :key="task.title"
+      :completedTasks="calculateCompletedTasks(task)"
+      @taskUpdated="hasTaskUpdated"
+      :filteredTasksList="filteredTasksList"
+    />
+  </transition>
+  <transition name="slide-fade">
+    <TaskEditDetails
+      v-show="isEditModalVisible"
+      @close="closeModal"
+      @edit="editModal"
+      :task="task"
+      :key="task.title"
+      :completedTasks="calculateCompletedTasks(task)"
+      @taskUpdated="hasTaskUpdated"
+      :filteredTasksList="filteredTasksList"
+    />
+  </transition>
 </template>
 
 <script>
-import TaskDetails from "./modal-view-task.vue";
-import TaskEditDetails from "./modal-edit-task.vue";
+import TaskDetails from "./modals/modal-view-task.vue";
+import TaskEditDetails from "./modals/modal-edit-task.vue";
 
 export default {
   name: "TaskCard",
@@ -89,3 +93,18 @@ export default {
   },
 };
 </script>
+
+<style lang="scss">
+.slide-fade-enter-active {
+  transition: opacity 0.2s ease-out;
+}
+
+.slide-fade-leave-active {
+  transition: opacity 0.2s ease-out;
+}
+
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+  opacity: 0;
+}
+</style>

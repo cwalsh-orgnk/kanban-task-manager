@@ -38,7 +38,7 @@
             :placeholder="'e.g. Make coffee'"
           />
           <button class="text-mediumGray">
-            <img src="../assets/icon-cross.svg" />
+            <img src="../../assets/icon-cross.svg" />
           </button>
         </div>
         <div class="input-wrap flex mb-3 items-center">
@@ -49,7 +49,7 @@
             :placeholder="'e.g. Drink coffee & smile'"
           />
           <button class="text-mediumGray">
-            <img src="../assets/icon-cross.svg" />
+            <img src="../../assets/icon-cross.svg" />
           </button>
         </div>
       </div>
@@ -77,8 +77,8 @@
   </div>
 </template>
 <script>
-import BaseButton from "./base-button.vue";
-import store from "../store/store.js";
+import BaseButton from "../base-button.vue";
+import store from "../../store/store.js";
 
 export default {
   name: "TaskAddNew",
@@ -147,5 +147,5 @@ export default {
 };
 </script>
 <style lang="scss">
-@import "../assets/base.scss";
+@import "../../assets/base.scss";
 </style>
