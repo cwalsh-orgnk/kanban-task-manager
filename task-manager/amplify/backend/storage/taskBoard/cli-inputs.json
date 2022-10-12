@@ -1,0 +1,10 @@
+{
+  "resourceName": "taskBoard",
+  "tableName": "taskBoard",
+  "partitionKey": {
+    "fieldName": "id",
+    "fieldType": "string"
+  },
+  "gsi": [],
+  "triggerFunctions": []
+}
