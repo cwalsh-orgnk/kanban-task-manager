@@ -1,6 +1,6 @@
 <template>
   <div
-    class="logo relative ml-6 mr-8"
+    class="logo relative ml-6 mr-8 flex items-center h-full border-r border-solid border-linesLight"
     :class="[sidebarOpen ? logoPaddingRight : logoPaddingRightNone]"
   >
     <img src="../assets/logo-dark.svg" />
@@ -13,8 +13,8 @@
       >All boards ( 3 )</span
     >
     <nav class="mr-6">
-      <ul v-if="avBoards != null && Object.keys(avBoards).length > 0">
-        <li v-for="board in avBoards[0].boards" :key="board.name">
+      <ul v-if="boards != null && Object.keys(boards).length > 0">
+        <li v-for="board in boards[0].boards" :key="board.name">
           <button
             :class="[this.activeBoard === board.name ? activeBoardClass : hiddenBoardClass]"
             @click="showBoard(board.name)"
@@ -67,6 +67,7 @@ export default {
   name: "NavSidebar",
   props: {
     msg: String,
+    boards: Object,
   },
   data() {
     return {
@@ -79,15 +80,11 @@ export default {
       hideButton: "opacity-0",
       logoPaddingRight: "pr-[5.2rem]",
       logoPaddingRightNone: "pr-8",
-      avBoards: null,
       activeBoardClass:
         "nav-item-active w-full pt-[15px] pb-[14px] pl-[24px] pr-[25px] text-center bg-mainPurple white m-0 flex items-center text-white rounded-r-full font-bold text-md",
       hiddenBoardClass:
         "nav-item w-full pt-[15px] pb-[14px] pl-[24px] pr-[25px] text-cente white m-0 flex items-center text-mediumGray rounded-r-full font-bold text-md",
     };
-  },
-  mounted() {
-    this.avBoards = this.getAll();
   },
   watch: {
     // whenever active changes, this function will run
@@ -116,19 +113,6 @@ export default {
           console.log(err);
         });
     },
-    getAll() {
-      let tasks = null;
-      API.get("tasksApi", `/tasks`, {})
-        .then((result) => {
-          console.log(JSON.parse(result.body));
-          this.avBoards = JSON.parse(result.body);
-          tasks = JSON.parse(result.body);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-      return tasks;
-    },
   },
   setup() {
     const { state } = store();
@@ -156,19 +140,5 @@ aside {
 }
 .logo {
   transition: padding ease-in-out 0.3s;
-}
-.logo:after {
-  content: "";
-  display: block;
-  width: 1px;
-  height: 100%;
-  background-color: rgb(228 235 250);
-  right: 0;
-  z-index: 111;
-  width: 1px;
-  height: 200vh;
-  overflow: hidden;
-  position: absolute;
-  top: -100vh;
 }
 </style>

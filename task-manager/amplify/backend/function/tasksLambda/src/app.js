@@ -70,20 +70,20 @@ app.put("/tasks", function (request, response) {
     Key: {
       id: request.body.id,
     },
-    ExpressionAttributeNames: { "#text": "text" },
+    ExpressionAttributeNames: { "#boards": "boards" },
     ExpressionAttributeValues: {},
     ReturnValues: "UPDATED_NEW",
   };
   params.UpdateExpression = "SET ";
-  if (request.body.text) {
-    params.ExpressionAttributeValues[":text"] = request.body.text;
-    params.UpdateExpression += "#text = :text, ";
+  if (request.body.boards) {
+    params.ExpressionAttributeValues[":boards"] = request.body.boards;
+    params.UpdateExpression += "#boards = :boards, ";
   }
-  if (request.body.complete) {
-    params.ExpressionAttributeValues[":complete"] = request.body.complete;
-    params.UpdateExpression += "complete = :complete, ";
+  if (request.body.tasks) {
+    params.ExpressionAttributeValues[":tasks"] = request.body.tasks;
+    params.UpdateExpression += "tasks = :tasks, ";
   }
-  if (request.body.text || request.body.complete) {
+  if (request.body.boards || request.body.tasks) {
     params.ExpressionAttributeValues[":updatedAt"] = timestamp;
     params.UpdateExpression += "updatedAt = :updatedAt";
   }

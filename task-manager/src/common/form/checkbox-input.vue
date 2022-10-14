@@ -1,13 +1,6 @@
 <template>
   <div class="checkbox-group">
-    <input
-      type="checkbox"
-      :name="inputName"
-      :id="inputId"
-      :checked="checked"
-      :v-bind:value="value"
-      v-on:input="$emit('input', $event.target.value)"
-    />
+    <input type="checkbox" :name="inputName" :id="inputId" :checked="checked" :value="value" />
     <label :for="inputId" :class="inputClass" class="text-base font-bold">
       {{ inputLabel }}
     </label>

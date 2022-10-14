@@ -11,6 +11,7 @@
               "title": "Build UI for onboarding flow",
               "description": "",
               "status": "Todo",
+              "board": "Platform Launch",
               "subtasks": [
                 {
                   "title": "Sign up page",
@@ -30,6 +31,7 @@
               "title": "Build UI for search",
               "description": "",
               "status": "Todo",
+              "board": "Platform Launch",
               "subtasks": [
                 {
                   "title": "Search page",
@@ -41,6 +43,7 @@
               "title": "Build settings UI",
               "description": "",
               "status": "Todo",
+              "board": "Platform Launch",
               "subtasks": [
                 {
                   "title": "Account page",
@@ -56,6 +59,7 @@
               "title": "QA and test all major user journeys",
               "description": "Once we feel version one is ready, we need to rigorously test it both internally and externally to identify any major gaps.",
               "status": "Todo",
+              "board": "Platform Launch",
               "subtasks": [
                 {
                   "title": "Internal testing",
@@ -295,6 +299,7 @@
               "title": "Plan Product Hunt launch",
               "description": "",
               "status": "Todo",
+              "board": "Platform Launch",
               "subtasks": [
                 {
                   "title": "Find hunter",
@@ -431,3 +436,4 @@
     }
   ]
 }
+

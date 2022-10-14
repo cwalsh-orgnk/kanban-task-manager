@@ -14,9 +14,10 @@
       @close="closeDetailsModal"
       @edit="editModal"
       :task="task"
+      :subtasks="task.subtasks"
+      :boards="boards"
       :key="task.title"
       :completedTasks="calculateCompletedTasks(task)"
-      @listUpdated="haslistUpdated"
       :filteredTasksList="filteredTasksList"
     />
   </transition>
@@ -26,6 +27,8 @@
       @close="closeEditModal"
       @edit="editModal"
       :task="task"
+      :boards="boards"
+      :subtasks="task.subtasks"
       :key="task.title"
       :completedTasks="calculateCompletedTasks(task)"
       @listUpdated="haslistUpdated"
@@ -50,6 +53,7 @@ export default {
   props: {
     task: Object,
     filteredTasksList: Array,
+    boards: String,
   },
   data() {
     return {

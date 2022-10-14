@@ -1,8 +1,8 @@
 <template>
   <header
-    class="fixed w-full top-o bg-white z-50 h-24 flex items-center px-10 top-0 border-b border-solid border-linesLight overflow-hidden"
+    class="fixed w-full top-o bg-white z-50 h-24 flex items-center px-10 top-0 border-b border-solid border-linesLight"
   >
-    <NavSidebar />
+    <slot></slot>
     <h1 class="text-xl black font-bold" v-if="task">{{ task }}</h1>
     <BaseButton
       :buttonText="'+ Add New Task'"
@@ -22,15 +22,10 @@
       />
     </div>
   </header>
-  <TaskAddNew
-    v-show="isAddNewModalVisible"
-    :filteredTasksList="filteredTasksList"
-    @close="closeAddNewModal"
-  />
+  <TaskAddNew v-show="isAddNewModalVisible" :boards="boards[0]" @close="closeAddNewModal" />
 </template>
 <script>
 import BaseButton from "../common/base-button.vue";
-import NavSidebar from "../common/nav-sidebar.vue";
 import TaskAddNew from "./modals/modal-add-task.vue";
 import EditDelete from "./tooltips/EditDelete.vue";
 import store from "../store/store.js";
@@ -39,12 +34,12 @@ export default {
   name: "HeaderMain",
   components: {
     BaseButton,
-    NavSidebar,
     TaskAddNew,
     EditDelete,
   },
   props: {
     msg: String,
+    boards: Object,
   },
   data() {
     return {
@@ -57,10 +52,12 @@ export default {
     addTaskButtonClass() {
       return this.activeBoard === null ? "opacity-25" : "active";
     },
-    filteredTasksList() {
-      const filteredTasks = this.tasks.boards.filter((val) => val.name.includes(this.activeBoard));
-      return filteredTasks;
-    },
+    // filteredTasksList() {
+    //   const filteredTasks = this.boards[1].boards.filter((val) =>
+    //     val.name.includes(this.activeBoard)
+    //   );
+    //   return filteredTasks;
+    // },
   },
   methods: {
     closeAddNewModal() {

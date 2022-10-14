@@ -1,5 +1,4 @@
 import { reactive, toRefs } from "@vue/reactivity";
-import tasks from "../data/data.json";
 /**
  * Define our state
  *
@@ -8,10 +7,8 @@ import tasks from "../data/data.json";
  * it will not mutate.
  */
 const state = reactive({
-  tasks: tasks,
   sidebarOpen: false,
-  activeBoard: tasks.boards[0].name,
-  boards: [],
+  activeBoard: "Platform Launch",
 });
 
 export default () => {
@@ -28,10 +25,6 @@ export default () => {
     return !state.activeBoard;
   };
 
-  const allBoards = () => {
-    console.log("response");
-  };
-
   /**
    * Return the state as a `reference` to make it mutable.
    */
@@ -40,6 +33,5 @@ export default () => {
     tasksList,
     sidebarInView,
     getActiveBoard,
-    allBoards,
   };
 };

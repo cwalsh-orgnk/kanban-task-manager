@@ -3,7 +3,7 @@
     <div
       v-for="board in filteredTasksList"
       v-bind:key="board.name"
-      class="column-container flex p-6 mt-24 h-[calc(100vh-8rem)] overflow-y-scroll"
+      class="column-container flex p-6 mt-24 h-[100vh] overflow-y-scroll"
     >
       <div
         v-for="column in board.columns"
@@ -14,11 +14,11 @@
           {{ column.name }}
         </h3>
         <TaskCard
-          v-for="task in column.tasks"
+          v-for="task in filteredTaskList(column.name, board.name)"
           :key="task.title"
           :task="task"
+          :boards="boards[0]"
           :filteredTasksList="filteredTasksList"
-          @listUpdated="updateList"
           class="task py-6 px-4 flex flex-col justify-center items-start text-left bg-white mb-5 rounded-lg w-full max-w-[calc(100%-1rem)] shadow"
         ></TaskCard>
       </div>
@@ -40,6 +40,9 @@ export default {
   components: {
     TaskCard,
   },
+  props: {
+    boards: Object,
+  },
   data() {
     return {
       activeClass: "list-container sidebar-active relative left-[300px] max-w-[calc(100%-300px)]",
@@ -48,25 +51,19 @@ export default {
   },
   computed: {
     filteredTasksList() {
-      const filteredTasks = this.tasks.boards.filter((val) => val.name.includes(this.activeBoard));
+      const filteredTasks = this.boards[0].boards.filter((board) =>
+        board.name.includes(this.activeBoard)
+      );
+      console.log(this.filteredTaskList);
       return filteredTasks;
     },
   },
   methods: {
-    updateList(task) {
-      this.filteredTasksList[0].columns.forEach((element) => {
-        element.tasks.forEach((childElement, i, object) => {
-          if (childElement.title === task.title) {
-            object.splice(i, 1);
-          }
-        });
-      });
-      this.filteredTasksList[0].columns.forEach((element, i, object) => {
-        if (element.name === task.status) {
-          object[i].tasks.push(task);
-          return;
-        }
-      });
+    filteredTaskList(status, board) {
+      const currentBoardTasks = this.boards[0].tasks.filter(
+        (task) => task.status === status && task.board === board
+      );
+      return currentBoardTasks;
     },
     calculateCompletedTasks(tasks) {
       let counter = 0;

@@ -8,8 +8,13 @@
     <option v-if="defaultOption" :value="defaultOption">
       {{ defaultOption }}
     </option>
-    <option v-for="option in options" v-bind:key="option" :value="option">
-      {{ option }}
+    <option
+      v-for="option in options"
+      v-bind:key="option.name"
+      :value="option.name"
+      :checked="option.checked"
+    >
+      {{ option.name }}
     </option>
   </select>
 </template>
@@ -17,8 +22,9 @@
 export default {
   name: "SelectInput",
   props: {
-    options: Array,
+    options: Object,
     defaultOption: String,
+    checked: String,
   },
 };
 </script>

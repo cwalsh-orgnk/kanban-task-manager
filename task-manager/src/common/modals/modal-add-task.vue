@@ -66,6 +66,10 @@ import TextArea from "../form/textarea-input.vue";
 import SelectInput from "../form/select-input.vue";
 import RemoveButton from "../buttons/remove-button.vue";
 import store from "../../store/store.js";
+import { API } from "aws-amplify";
+import { Amplify } from "aws-amplify";
+import awsconfig from "../../aws-exports";
+Amplify.configure(awsconfig);
 
 export default {
   name: "TaskAddNew",
@@ -83,6 +87,7 @@ export default {
   props: {
     completedTasks: String,
     filteredTasksList: Array,
+    boards: Object,
   },
   data() {
     return {
@@ -112,42 +117,55 @@ export default {
     },
     filteredStatusList() {
       if (this.activeBoard === null) return;
-      const availableStatus = [];
-      this.filteredTasksList[0].columns.forEach((element) => {
-        availableStatus.push(element.name);
-      });
+      const availableStatus = ["Todo"];
       return availableStatus;
     },
   },
   methods: {
+    addTaskDB(id) {
+      console.log(`addTaskDB`);
+      API.post("tasksApi", `/tasks`, {
+        body: {
+          id: id,
+          boards: this.boards.boards,
+          tasks: this.boards.tasks,
+          example: "example",
+        },
+      })
+        .then((result) => {
+          console.log(result);
+          this.lastTodoId = JSON.parse(result.body).id;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
     saveTask() {
-      // let subtasks = [];
-      // this.defaultSubtasks.forEach((element) => {
-      //   if (element.value != null) {
-      //     subtasks.push(element.value);
-      //   }
-      // });
-      // var data = {
-      //   title: this.newTask.title,
-      //   description: this.newTask.description,
-      //   subtasks: subtasks.length ? JSON.stringify(subtasks) : null,
-      //   status: "this.newTask.status",
-      //   board: this.activeBoard,
-      // };
-      // TaskDataService.create(data)
-      //   .then((response) => {
-      //     this.task.id = response.data.id;
-      //     console.log(response.data);
-      //     this.submitted = true;
-      //     this.close();
-      //   })
-      //   .then(() => {
-      //     this.close();
-      //   })
-      //   .catch((e) => {
-      //     console.log(e);
-      //   });
-      // this.close();
+      let subtasks = [];
+      this.defaultSubtasks.forEach((element) => {
+        if (element.value != null) {
+          let subtask = {
+            title: element.value,
+            isCompleted: false,
+          };
+          subtasks.push(subtask);
+        }
+      });
+      console.log(subtasks);
+      var task = {
+        title: this.newTask.title,
+        description: this.newTask.description,
+        subtasks: subtasks.length ? subtasks : null,
+        status: "Todo",
+        board: this.activeBoard,
+      };
+      console.log(this.boards);
+      this.addTaskUI(this.boards.tasks, task);
+      this.addTaskDB(this.boards.id);
+      this.close();
+    },
+    addTaskUI(taskList, task) {
+      taskList.push(task);
     },
     initNewTask() {
       this.submitted = false;

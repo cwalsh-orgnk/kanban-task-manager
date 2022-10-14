@@ -3,7 +3,10 @@
     class="modal-backdrop fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50"
     @click="close"
   >
-    <div class="modal bg-white flex flex-col shadow-sm max-w-md w-full p-8 m-8 z-90" @click.stop>
+    <div
+      class="modal bg-white flex flex-col shadow-sm max-w-md w-full p-8 m-8 z-90 text-left"
+      @click.stop
+    >
       <header class="modal-header relative mb-6">
         <h3 class="title text-lg font-bold text-black">Edit Task</h3>
       </header>
@@ -105,7 +108,6 @@ export default {
   },
   methods: {
     getAllData(task) {
-      console.info(this.taskForm);
       let myForm = document.getElementById("frm");
       let formData = new FormData(myForm);
       const data = {};
