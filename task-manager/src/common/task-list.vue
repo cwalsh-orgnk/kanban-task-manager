@@ -1,16 +1,20 @@
 <template>
-  <div :class="[sidebarOpen ? activeClass : hiddenClass]">
+  <div class="bg-lightGray" :class="[sidebarOpen ? activeClass : hiddenClass]">
     <div
       v-for="board in filteredTasksList"
       v-bind:key="board.name"
       class="column-container flex p-6 mt-24 h-[100vh] overflow-y-scroll"
     >
       <div
-        v-for="column in board.columns"
+        v-for="(column, index) in board.columns"
         v-bind:key="column.name"
         class="column mt-6 w-[280px] min-w-[280px]"
       >
-        <h3 class="font-bold text-xs tracking-widest mb-6 text-mediumGray">
+        <h3 class="font-bold flex text-xs tracking-widest mb-6 text-mediumGray">
+          <i
+            class="icon w-[15px] h-[15px] min-w-[15px] mr-3 bg-mainPurple rounded-full"
+            :style="{ backgroundColor: columnColors(index) }"
+          ></i>
           {{ column.name }}
         </h3>
         <TaskCard
@@ -58,6 +62,17 @@ export default {
     },
   },
   methods: {
+    columnColors(index) {
+      const columnColors = ["#49C4E5", "#8471F2", "#67E2AE"];
+      if (index < columnColors.length) {
+        return columnColors[index];
+      } else {
+        const red = Math.floor(((1 + Math.random()) * 256) / 2);
+        const green = Math.floor(((1 + Math.random()) * 256) / 2);
+        const blue = Math.floor(((1 + Math.random()) * 256) / 2);
+        return "rgb(" + red + ", " + green + ", " + blue + ")";
+      }
+    },
     filteredTaskList(status, board) {
       const currentBoardTasks = this.boards[0].tasks.filter(
         (task) => task.status === status && task.board === board
