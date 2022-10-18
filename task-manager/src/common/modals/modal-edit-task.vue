@@ -4,11 +4,11 @@
     @click="close"
   >
     <div
-      class="modal bg-white flex flex-col shadow-sm max-w-md w-full p-8 m-8 z-90 text-left"
+      class="modal bg-white flex flex-col shadow-sm max-w-md w-full p-8 m-8 z-90 text-left dark:bg-darkGray"
       @click.stop
     >
       <header class="modal-header relative mb-6">
-        <h3 class="title text-lg font-bold text-black">Edit Task</h3>
+        <h3 class="title text-lg font-bold text-black dark:text-white">Edit Task</h3>
       </header>
       <form id="frm">
         <div class="input-group flex flex-col mb-6">
@@ -23,7 +23,9 @@
           />
         </div>
         <div class="input-group flex flex-col">
-          <label for="subtask" class="text-xs text-mediumGray font-bold mb-2">Subtasks</label>
+          <label for="subtask" class="text-xs text-mediumGray font-bold mb-2 dark:text-white"
+            >Subtasks</label
+          >
           <div
             class="input-wrap flex mb-3 items-center"
             v-for="(subtask, index) in task.subtasks"
@@ -39,10 +41,10 @@
         </div>
         <BaseButton
           :buttonText="'+ Add New Subtask'"
-          :class="'w-full text-mainPurple bg-mainPurple bg-opacity-10'"
+          :class="'w-full text-mainPurple bg-mainPurple bg-opacity-10 dark:bg-white dark:text-mainPurple'"
           @click.stop
         />
-        <h5 class="text-xs text-mediumGray font-bold mt-6 mb-2">Current Status</h5>
+        <h5 class="text-xs text-mediumGray font-bold mt-6 mb-2 dark:text-white">Current Status</h5>
         <div class="select-wrapper mb-6">
           <SelectInput
             @change="selected(task, $event)"

@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" :class="lightMode ? 'light' : 'dark bg-veryDarkGray'">
     <authenticator>
       <template v-slot="{ user }" v-if="boards != null && Object.keys(boards).length > 0">
         <HeaderMain :user="user" :boards="this.boards">
@@ -20,6 +20,7 @@ import { API } from "aws-amplify";
 import HeaderMain from "./common/header-main.vue";
 import NavSidebar from "./common/nav-sidebar.vue";
 import TasksList from "./common/task-list.vue";
+import store from "./store/store.js";
 
 Amplify.configure(awsconfig);
 export default {
@@ -50,6 +51,13 @@ export default {
           console.log(err);
         });
     },
+  },
+  setup() {
+    const { state } = store();
+
+    return {
+      ...state,
+    };
   },
 };
 </script>

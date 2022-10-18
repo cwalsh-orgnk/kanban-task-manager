@@ -9,6 +9,7 @@ import { reactive, toRefs } from "@vue/reactivity";
 const state = reactive({
   sidebarOpen: false,
   activeBoard: "Platform Launch",
+  lightMode: true,
 });
 
 export default () => {
@@ -25,6 +26,11 @@ export default () => {
     return !state.activeBoard;
   };
 
+  const setThemeMode = () => {
+    console.log("response");
+    return !state.lightMode;
+  };
+
   /**
    * Return the state as a `reference` to make it mutable.
    */
@@ -33,5 +39,6 @@ export default () => {
     tasksList,
     sidebarInView,
     getActiveBoard,
+    setThemeMode,
   };
 };

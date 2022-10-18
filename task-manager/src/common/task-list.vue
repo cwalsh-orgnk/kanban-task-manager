@@ -1,5 +1,8 @@
 <template>
-  <div class="bg-lightGray" :class="[sidebarOpen ? activeClass : hiddenClass]">
+  <div
+    class="bg-lightGray transition-all dark:bg-veryDarkGray"
+    :class="[sidebarOpen ? activeClass : hiddenClass]"
+  >
     <div
       v-for="board in filteredTasksList"
       v-bind:key="board.name"
@@ -98,9 +101,9 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss">
 .list-container {
-  transition: left ease-in-out 0.3s;
+  transition: left ease-in-out 0.3s, background-color ease-in-out 0.3s;
 }
 .column-container {
   display: flex;
@@ -109,6 +112,12 @@ export default {
 }
 .new-task {
   background: linear-gradient(180deg, #e9effa 0%, rgba(233, 239, 250, 0.5) 100%);
+}
+
+.dark {
+  .new-task {
+    background: linear-gradient(180deg, rgba(43, 44, 55, 0.25) 0%, rgba(43, 44, 55, 0.125) 100%);
+  }
 }
 /*
   Enter and leave animations can use different

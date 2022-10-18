@@ -4,11 +4,11 @@
     @click="close(task)"
   >
     <div
-      class="modal bg-white flex flex-col shadow-sm max-w-md w-full p-8 m-8 z-90 text-left"
+      class="modal bg-white flex flex-col shadow-sm max-w-md w-full p-8 m-8 z-90 text-left dark:bg-darkGray"
       @click.stop
     >
       <header class="modal-header relative flex justify-between">
-        <h3 class="title text-lg font-bold text-black">
+        <h3 class="title text-lg font-bold text-black dark:text-white">
           {{ task.title }}
         </h3>
         <button type="button" class="btn-close" @click="options">
@@ -29,11 +29,13 @@
       </div>
 
       <section class="tasks">
-        <h5 class="text-xs text-mediumGray font-bold mt-6 mb-4">
+        <h5 class="text-xs text-mediumGray font-bold mt-6 mb-4 dark:text-white">
           {{ completedTasks }}
         </h5>
         <ul v-for="(subtask, index) in task.subtasks" v-bind:key="subtask.title">
-          <li class="flex items-center bg-lightGray p-3 mb-3">
+          <li
+            class="flex items-center bg-lightGray dark:bg-veryDarkGray p-3 mb-3 transition-colors"
+          >
             <CheckboxInput
               :inputName="task.title"
               :inputId="task.title + '-' + subtask.title + '-' + index"
@@ -46,8 +48,8 @@
         </ul>
       </section>
       <section class="mt-6">
-        <h5 class="text-xs text-mediumGray font-bold mt-6 mb-2">Current Status</h5>
-        <div class="select-wrapper">
+        <h5 class="text-xs text-mediumGray font-bold mt-6 mb-2 dark:text-white">Current Status</h5>
+        <div class="select-wrapper dark:text-white">
           <SelectInput
             @change="selected($event)"
             :defaultOption="task.status"
@@ -88,7 +90,7 @@ export default {
   data() {
     return {
       isCompleted: "text-mediumGray line-through",
-      notCompleted: "",
+      notCompleted: "dark:text-white",
       orgnialStatus: this.task.status,
       newStatus: this.task.status,
       showOptions: false,

@@ -4,11 +4,11 @@
     @click="close"
   >
     <div
-      class="modal bg-white flex flex-col shadow-sm max-w-lg w-full p-8 m-8 text-left"
+      class="modal bg-white flex flex-col shadow-sm max-w-lg w-full p-8 m-8 text-left dark:bg-darkGray"
       @click.stop
     >
       <header class="modal-header relative mb-6">
-        <h3 class="title text-lg font-bold text-black">Add New Board</h3>
+        <h3 class="title text-lg font-bold text-black dark:text-white">Add New Board</h3>
       </header>
       <div class="input-group flex flex-col mb-6">
         <TextInput

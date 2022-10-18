@@ -1,13 +1,13 @@
 <template>
   <div
-    class="logo relative ml-6 mr-8 flex items-center h-full border-r border-solid border-linesLight"
+    class="logo relative ml-6 mr-8 flex items-center h-full border-r border-solid border-linesLight dark:border-lines"
     :class="[sidebarOpen ? logoPaddingRight : logoPaddingRightNone]"
   >
     <img src="../assets/logo-dark.svg" />
   </div>
   <aside
     :class="[sidebarOpen ? activeClass : hiddenClass]"
-    class="top-20 top left-0 pt-6 border-r border-solid border-linesLight"
+    class="top-20 top left-0 pt-6 border-r border-solid border-linesLight dark:bg-darkGray dark:border-lines"
   >
     <span class="font-bold uppercase text-mediumGray text-xs w-full block mb-4 ml-8 tracking-widest"
       >All boards ( 3 )</span
@@ -41,8 +41,18 @@
       </ul>
     </nav>
     <div
-      class="sidebar-actions absolute bottom-0 w-full flex flex-col my-6 flex-grow-0 text-mediumGray text-md font-bold"
+      class="sidebar-actions absolute bottom-0 w-full flex flex-col my-6 flex-grow-0 text-mediumGray text-md font-bold mb-11"
     >
+      <div
+        class="dark-mode bg-lightGray flex m-6 py-6 justify-center items-center transition-colors dark:bg-veryDarkGray"
+      >
+        <img class="mr-4 w-[25px] min-w-[25px] h-[25px]" src="../assets/icon-light-theme.svg" />
+        <label class="switch">
+          <input type="checkbox" checked @click="toggleTheme($event)" />
+          <span class="slider round"></span>
+        </label>
+        <img class="ml-4 w-[25px] min-w-[25px] h-[25px]" src="../assets/icon-dark-theme.svg" />
+      </div>
       <button class="flex items-center justify-center" @click="showSidebar()">
         <img class="mr-4" src="../assets/icon-hide-sidebar.svg" />Hide sidebar
       </button>
@@ -86,10 +96,11 @@ export default {
   data() {
     return {
       isAddBoardModalVisible: false,
+      lightMode: true,
       user: {},
       lastTodoId: "",
       activeClass:
-        "aside position fixed w-[300px] bg-white h-[calc(100vh-96px()] top-24 left-0 sidebar-visible z-10 opacity-100",
+        "aside position fixed w-[300px] bg-white h-[calc(100vh-96px] top-24 left-0 sidebar-visible z-10 opacity-100",
       hiddenClass: "aside position fixed bg-white h-[100vh] top-24 left-0 opacity-0",
       showButton: "opacity-100",
       hideButton: "opacity-0",
@@ -110,6 +121,10 @@ export default {
     },
   },
   methods: {
+    toggleTheme() {
+      this.lightMode = !this.lightMode;
+      console.log(this.lightMode);
+    },
     showAddBoardModal() {
       this.isAddBoardModalVisible = true;
     },
@@ -174,5 +189,65 @@ aside {
 .slide-fade-enter-from,
 .slide-fade-leave-to {
   opacity: 0;
+}
+/* The switch - the box around the slider */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 30px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 22px;
+  width: 22px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+}
+
+input:checked + .slider {
+  background-color: #635fc7;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #635fc7;
+}
+
+input:not(:checked) + .slider:before {
+  -webkit-transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 30px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
 }
 </style>

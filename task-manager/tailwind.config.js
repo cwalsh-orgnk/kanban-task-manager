@@ -2,7 +2,7 @@
 module.exports = {
   content: ["./public/**/*.html", "./src/**/*.{vue,js,ts,jsx,tsx}"],
   presets: [],
-  darkMode: "media", // or 'class'
+  darkMode: "class", // or 'class'
   theme: {
     screens: {
       sm: "640px",
@@ -18,7 +18,7 @@ module.exports = {
       mainPurple: "#635FC7",
       mainPurpleHover: "#A8A4FF",
       black: "#000112",
-      veryDarkGray: "20212C",
+      veryDarkGray: "#20212C",
       darkGray: "#2b2C37",
       lines: "#3E3F4E",
       mediumGray: "#828FA3",

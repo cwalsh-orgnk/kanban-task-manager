@@ -1,9 +1,9 @@
 <template>
   <header
-    class="fixed w-full top-o bg-white z-50 h-24 flex items-center px-10 top-0 border-b border-solid border-linesLight"
+    class="fixed w-full top-o bg-white z-50 h-24 flex items-center px-10 top-0 border-b border-solid transition-colors border-linesLight dark:border-lines dark:bg-darkGray"
   >
     <slot></slot>
-    <h1 class="text-xl black font-bold" v-if="task">{{ task }}</h1>
+    <h1 class="text-xl black font-bold dark:text-white" v-if="task">{{ task }}</h1>
     <BaseButton
       :buttonText="'+ Add New Task'"
       :class="this.addTaskButtonClass"

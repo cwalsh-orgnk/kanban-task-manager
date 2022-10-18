@@ -3,9 +3,12 @@
     class="modal-backdrop fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50"
     @click="close"
   >
-    <div class="modal bg-white flex flex-col shadow-sm max-w-lg w-full p-8 m-8" @click.stop>
+    <div
+      class="modal bg-white flex flex-col shadow-sm max-w-lg w-full p-8 m-8 dark:bg-darkGray"
+      @click.stop
+    >
       <header class="modal-header relative mb-6">
-        <h3 class="title text-lg font-bold text-black">Add New Board</h3>
+        <h3 class="title text-lg font-bold text-black dark:text-white">Add New Board</h3>
       </header>
       <div class="input-group flex flex-col mb-6">
         <label for="title" class="text-xs text-mediumGray font-bold mb-2">Name</label>
