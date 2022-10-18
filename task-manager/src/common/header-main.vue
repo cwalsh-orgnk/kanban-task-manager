@@ -22,12 +22,14 @@
       />
     </div>
   </header>
-  <TaskAddNew
-    v-show="isAddNewModalVisible"
-    :boards="boards[0]"
-    @close="closeAddNewModal"
-    :filteredTasksList="filteredTasksList"
-  />
+  <transition name="slide-fade">
+    <TaskAddNew
+      v-show="isAddNewModalVisible"
+      :boards="boards[0]"
+      @close="closeAddNewModal"
+      :filteredTasksList="filteredTasksList"
+    />
+  </transition>
 </template>
 <script>
 import BaseButton from "../common/base-button.vue";
@@ -114,5 +116,18 @@ a {
 .header {
   right: 0;
   transition: width ease-in-out 0.3s;
+}
+
+.slide-fade-enter-active {
+  transition: opacity 0.2s ease-out;
+}
+
+.slide-fade-leave-active {
+  transition: opacity 0.2s ease-out;
+}
+
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+  opacity: 0;
 }
 </style>
