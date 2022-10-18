@@ -3,7 +3,7 @@
     class="logo relative ml-6 mr-8 flex items-center h-full border-r border-solid border-linesLight dark:border-lines"
     :class="[sidebarOpen ? logoPaddingRight : logoPaddingRightNone]"
   >
-    <img src="../assets/logo-dark.svg" />
+    <img :src="image" />
   </div>
   <aside
     :class="[sidebarOpen ? activeClass : hiddenClass]"
@@ -96,7 +96,6 @@ export default {
   data() {
     return {
       isAddBoardModalVisible: false,
-      lightMode: true,
       user: {},
       lastTodoId: "",
       activeClass:
@@ -118,6 +117,13 @@ export default {
       if (this.sidebarOpen) {
         document.body.style.overflow = this.sidebarOpen ? "hidden" : "";
       }
+    },
+  },
+  computed: {
+    image() {
+      return this.lightMode
+        ? require("../assets/logo-dark.svg")
+        : require("../assets/logo-light.svg");
     },
   },
   methods: {
