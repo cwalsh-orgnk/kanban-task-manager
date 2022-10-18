@@ -4,180 +4,136 @@
     @click="close"
   >
     <div
-      class="modal bg-white flex flex-col shadow-sm max-w-lg w-full p-8 m-8"
+      class="modal bg-white flex flex-col shadow-sm max-w-lg w-full p-8 m-8 text-left"
       @click.stop
     >
       <header class="modal-header relative mb-6">
-        <h3 class="title text-lg font-bold text-black">Add New Task</h3>
+        <h3 class="title text-lg font-bold text-black">Add New Board</h3>
       </header>
       <div class="input-group flex flex-col mb-6">
         <TextInput
-          :label="'Title'"
-          :name="'title'"
-          v-bind:value="newTask.title"
-          v-on:input="newTask.title = $event"
-        />
-      </div>
-      <div class="input-group flex flex-col mb-6">
-        <TextArea
-          :name="'description'"
-          :label="'Description'"
-          :placeholder="'e.g. It’s always good to take a break. This 15 minute break will recharge the batteries a little.'"
-          v-bind:value="newTask.description"
-          v-on:input="newTask.description = $event"
+          :label="'Name'"
+          :name="'name'"
+          v-bind:value="newBoard.name"
+          v-on:input="newBoard.name = $event"
         />
       </div>
       <div class="input-group flex flex-col">
-        <label for="subtask" class="text-xs text-mediumGray font-bold mb-2"
-          >Subtasks</label
-        >
+        <label for="column" class="text-xs text-mediumGray font-bold mb-2">columns</label>
         <div
           class="input-wrap flex mb-3 items-center"
-          v-for="(subtask, index) in defaultSubtasks"
+          v-for="(column, index) in defaultColumns"
           v-bind:key="index"
         >
           <TextInput
-            :name="'subtask[' + index + ']'"
+            :name="'column[' + index + ']'"
             :inputClass="'mr-4'"
-            :placeholder="subtask.placeholder"
-            v-bind:value="subtask.value"
-            v-on:input="subtask.value = $event"
+            :placeholder="column.placeholder"
+            v-bind:value="column.value"
+            v-on:input="column.value = $event"
           />
-          <RemoveButton @click.stop />
+          <RemoveButton @click="defaultColumns.splice(index, 1)" />
         </div>
       </div>
       <BaseButton
-        :buttonText="'+ Add New Subtask'"
-        :class="'w-full text-mainPurple bg-mainPurple bg-opacity-10'"
+        :buttonText="'+ Add New Column'"
+        :class="'w-full text-mainPurple bg-mainPurple bg-opacity-10 mb-6'"
+        @click="addColumn"
       />
-      <h5 class="text-xs text-mediumGray font-bold mt-6 mb-2">Status</h5>
-      <div class="select-wrapper mb-6">
-        <SelectInput
-          @change="selected(task, $event)"
-          :options="filteredStatusList"
-          :name="'status'"
-          v-bind:value="newTask.status"
-          v-on:input="newTask.status = $event"
-        />
-      </div>
-      <BaseButton
-        :buttonText="'Save Changes'"
-        :class="'w-full'"
-        @click="saveTask"
-      />
+      <BaseButton :buttonText="'Create New board'" :class="'w-full'" @click="saveBoard" />
     </div>
   </div>
 </template>
 <script>
-import BoardDataService from "../../services/BoardDataService";
 import BaseButton from "../base-button.vue";
 import TextInput from "../form/text-input.vue";
-import TextArea from "../form/textarea-input.vue";
-import SelectInput from "../form/select-input.vue";
 import RemoveButton from "../buttons/remove-button.vue";
 import store from "../../store/store.js";
-
+import { API } from "aws-amplify";
+import { Amplify } from "aws-amplify";
+import awsconfig from "../../aws-exports";
+var uuid = require("uuid");
+Amplify.configure(awsconfig);
 export default {
-  name: "TaskAddNew",
+  name: "AddBoard",
   components: {
     TextInput,
-    TextArea,
-    SelectInput,
     RemoveButton,
     BaseButton,
   },
-  emits: {
-    taskUpdated: false,
-    editModal: false,
-  },
   props: {
-    completedTasks: String,
-    filteredTasksList: Array,
+    boards: Object,
   },
   data() {
     return {
-      isCompleted: "text-mediumGray line-through",
-      notCompleted: "",
-      showOptions: false,
-      showEditTask: false,
-      subtasks: [],
-      newTask: {
-        title: "",
-        description: "",
-        subtasks: [],
-        status: "",
+      columns: [],
+      defaultColumns: [
+        {
+          placeholder: "Todo",
+          value: "Todo",
+        },
+        {
+          placeholder: "Doing",
+          value: "Doing",
+        },
+      ],
+      newBoard: {
+        id: uuid.v4(),
+        name: "",
+        columns: [],
       },
     };
   },
-  computed: {
-    defaultSubtasks() {
-      const defaultSubtasks = [];
-      const subtasks = {
-        placeholder: "e.g. Make a pot of coffee",
+  methods: {
+    addColumn() {
+      const column = {
+        placeholder: "e.g. Todo/Doing/Done etc",
         value: null,
       };
-      defaultSubtasks.push(subtasks);
-      defaultSubtasks.push(subtasks);
-      return defaultSubtasks;
+      this.defaultColumns.push(column);
     },
-    filteredStatusList() {
-      if (this.activeBoard === null) return;
-      const availableStatus = [];
-      this.filteredTasksList[0].columns.forEach((element) => {
-        availableStatus.push(element.name);
-      });
-      return availableStatus;
-    },
-  },
-  methods: {
-    saveTask() {
+    saveBoard() {
       let columns = [];
-      this.filteredTasksList[0].columns.forEach((element) => {
-        if (element.name != null) {
-          columns.push(element.name);
+      this.defaultColumns.forEach((element) => {
+        if (element.value != null) {
+          let column = {
+            name: element.value,
+          };
+          columns.push(column);
         }
       });
-      var data = {
-        title: this.activeBoard,
-        columns: JSON.stringify(columns),
+      var board = {
+        id: this.newBoard.id,
+        name: this.newBoard.name,
+        columns: columns.length ? columns : null,
       };
-      BoardDataService.create(data)
-        .then((response) => {
-          this.task.id = response.data.id;
-          console.log(response.data);
-          this.submitted = true;
+      this.addTaskUI(this.boards[0].boards, board);
+      this.addTaskDB(this.boards.id);
+    },
+    addTaskUI(boardList, board) {
+      boardList.push(board);
+    },
+    addTaskDB(id) {
+      console.log(`addBoardDB`);
+      API.post("tasksApi", `/tasks`, {
+        body: {
+          id: id,
+          boards: this.boards[0].boards,
+        },
+      })
+        .then((result) => {
+          console.log(result);
+          this.close();
         })
-        .catch((e) => {
-          console.log(e);
+        .catch((err) => {
+          console.log(err);
         });
     },
-    initNewTask() {
-      this.submitted = false;
-      this.task = {};
-    },
     close() {
-      if (this.status === this.task.status) {
-        this.$emit("taskUpdated", false);
-      } else {
-        this.$emit("taskUpdated", true);
-      }
       this.$emit("close");
-    },
-    options() {
-      this.showOptions = !this.showOptions;
-    },
-    edit() {
-      this.showOptions = false;
-      this.$emit("edit");
     },
     deleteTask() {
       return false;
-    },
-    check(subtask) {
-      subtask.isCompleted = !subtask.isCompleted;
-    },
-    selected(task, event) {
-      task.status = event.target.value;
     },
   },
   setup() {

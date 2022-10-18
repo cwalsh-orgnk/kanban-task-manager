@@ -8,13 +8,8 @@
     <option v-if="defaultOption" :value="defaultOption">
       {{ defaultOption }}
     </option>
-    <option
-      v-for="option in options"
-      v-bind:key="option.name"
-      :value="option.name"
-      :checked="option.checked"
-    >
-      {{ option.name }}
+    <option v-for="option in options" v-bind:key="option" :value="option">
+      {{ option }}
     </option>
   </select>
 </template>

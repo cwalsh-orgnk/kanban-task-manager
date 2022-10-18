@@ -22,7 +22,12 @@
       />
     </div>
   </header>
-  <TaskAddNew v-show="isAddNewModalVisible" :boards="boards[0]" @close="closeAddNewModal" />
+  <TaskAddNew
+    v-show="isAddNewModalVisible"
+    :boards="boards[0]"
+    @close="closeAddNewModal"
+    :filteredTasksList="filteredTasksList"
+  />
 </template>
 <script>
 import BaseButton from "../common/base-button.vue";
@@ -52,12 +57,12 @@ export default {
     addTaskButtonClass() {
       return this.activeBoard === null ? "opacity-25" : "active";
     },
-    // filteredTasksList() {
-    //   const filteredTasks = this.boards[1].boards.filter((val) =>
-    //     val.name.includes(this.activeBoard)
-    //   );
-    //   return filteredTasks;
-    // },
+    filteredTasksList() {
+      const filteredTasks = this.boards[0].boards.filter((board) =>
+        board.name.includes(this.activeBoard)
+      );
+      return filteredTasks;
+    },
   },
   methods: {
     closeAddNewModal() {

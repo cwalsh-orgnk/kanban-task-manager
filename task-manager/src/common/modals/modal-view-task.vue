@@ -101,11 +101,7 @@ export default {
       const availableStatus = [];
       this.filteredTasksList[0].columns.forEach((element) => {
         if (this.task.status != element.name) {
-          let status = {
-            name: element.name,
-            checked: this.task.status === element.name ? true : false,
-          };
-          availableStatus.push(status);
+          availableStatus.push(element.name);
         }
       });
       return availableStatus;

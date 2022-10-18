@@ -54,7 +54,6 @@ export default {
       const filteredTasks = this.boards[0].boards.filter((board) =>
         board.name.includes(this.activeBoard)
       );
-      console.log(this.filteredTaskList);
       return filteredTasks;
     },
   },

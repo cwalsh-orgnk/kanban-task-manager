@@ -3,7 +3,10 @@
     class="modal-backdrop fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50"
     @click="close"
   >
-    <div class="modal bg-white flex flex-col shadow-sm max-w-lg w-full p-8 m-8" @click.stop>
+    <div
+      class="modal bg-white flex flex-col shadow-sm max-w-lg w-full p-8 m-8 text-left"
+      @click.stop
+    >
       <header class="modal-header relative mb-6">
         <h3 class="title text-lg font-bold text-black">Add New Task</h3>
       </header>
@@ -38,12 +41,13 @@
             v-bind:value="subtask.value"
             v-on:input="subtask.value = $event"
           />
-          <RemoveButton @click.stop />
+          <RemoveButton @click="defaultSubtasks.splice(index, 1)" />
         </div>
       </div>
       <BaseButton
         :buttonText="'+ Add New Subtask'"
         :class="'w-full text-mainPurple bg-mainPurple bg-opacity-10'"
+        @click="addSubtask"
       />
       <h5 class="text-xs text-mediumGray font-bold mt-6 mb-2">Status</h5>
       <div class="select-wrapper mb-6">
@@ -51,8 +55,6 @@
           @change="selected(task, $event)"
           :options="filteredStatusList"
           :name="'status'"
-          v-bind:value="newTask.status"
-          v-on:input="newTask.status = $event"
         />
       </div>
       <BaseButton :buttonText="'Save Changes'" :class="'w-full'" @click="saveTask" />
@@ -102,26 +104,38 @@ export default {
         subtasks: [],
         status: "",
       },
+      defaultSubtasks: [
+        {
+          placeholder: "e.g. Make a pot of coffee",
+          value: null,
+        },
+        {
+          placeholder: "e.g. Make a pot of coffee",
+          value: null,
+        },
+      ],
     };
   },
   computed: {
-    defaultSubtasks() {
-      const defaultSubtasks = [];
-      const subtasks = {
-        placeholder: "e.g. Make a pot of coffee",
-        value: null,
-      };
-      defaultSubtasks.push(subtasks);
-      defaultSubtasks.push(subtasks);
-      return defaultSubtasks;
-    },
     filteredStatusList() {
-      if (this.activeBoard === null) return;
-      const availableStatus = ["Todo"];
+      const availableStatus = [];
+      this.filteredTasksList[0].columns.forEach((element) => {
+        availableStatus.push(element.name);
+      });
       return availableStatus;
     },
   },
   methods: {
+    addSubtask() {
+      const subtask = {
+        placeholder: "e.g. Make a pot of coffee",
+        value: null,
+      };
+      this.defaultSubtasks.push(subtask);
+    },
+    removeSubtask(subtask, index) {
+      this.defaultSubtasks.splice(index, 1);
+    },
     addTaskDB(id) {
       console.log(`addTaskDB`);
       API.post("tasksApi", `/tasks`, {
@@ -188,7 +202,7 @@ export default {
       subtask.isCompleted = !subtask.isCompleted;
     },
     selected(task, event) {
-      task.status = event.target.value;
+      this.newTask.status = event.target.value;
     },
   },
   setup() {

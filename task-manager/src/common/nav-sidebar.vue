@@ -32,6 +32,7 @@
         <li>
           <button
             class="nav-item w-full pt-[15px] pb-[14px] pl-[24px] pr-[25px] text-cente white m-0 flex items-center text-mainPurple rounded-r-full font-bold text-md"
+            @click="showAddBoardModal"
           >
             <img class="mr-4" src="../assets/icon-board-purple.svg" />
             + Create New Board
@@ -54,6 +55,14 @@
   >
     <img class="m-[19px] w-[18px] h-[10px]" src="../assets/icon-show-sidebar.svg" />
   </button>
+  <transition name="slide-fade">
+    <AddBoard
+      v-if="isAddBoardModalVisible"
+      @close="closeAddBoardModal"
+      :boards="boards"
+      :filteredTasksList="filteredTasksList"
+    />
+  </transition>
 </template>
 
 <script>
@@ -61,16 +70,22 @@ import { API } from "aws-amplify";
 import { Amplify } from "aws-amplify";
 import awsconfig from "./../aws-exports";
 import store from "../store/store.js";
+import AddBoard from "./modals/modal-add-board.vue";
+
 Amplify.configure(awsconfig);
 
 export default {
   name: "NavSidebar",
+  components: {
+    AddBoard,
+  },
   props: {
     msg: String,
     boards: Object,
   },
   data() {
     return {
+      isAddBoardModalVisible: false,
       user: {},
       lastTodoId: "",
       activeClass:
@@ -95,6 +110,9 @@ export default {
     },
   },
   methods: {
+    showAddBoardModal() {
+      this.isAddBoardModalVisible = true;
+    },
     showSidebar() {
       this.sidebarOpen = !this.sidebarOpen;
     },
@@ -102,6 +120,9 @@ export default {
       console.log(board);
       console.log(this.activeBoard);
       this.activeBoard = board;
+    },
+    closeAddBoardModal() {
+      this.isAddBoardModalVisible = false;
     },
     getTodos() {
       console.log("getTodos");
@@ -140,5 +161,18 @@ aside {
 }
 .logo {
   transition: padding ease-in-out 0.3s;
+}
+
+.slide-fade-enter-active {
+  transition: opacity 0.2s ease-out;
+}
+
+.slide-fade-leave-active {
+  transition: opacity 0.2s ease-out;
+}
+
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+  opacity: 0;
 }
 </style>
