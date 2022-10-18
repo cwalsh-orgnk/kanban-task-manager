@@ -1,5 +1,5 @@
 <template>
-  <div class="checkbox-group">
+  <div class="checkbox-group w-full">
     <input type="checkbox" :name="inputName" :id="inputId" :checked="checked" :value="value" />
     <label :for="inputId" :class="inputClass" class="text-base font-bold">
       {{ inputLabel }}
