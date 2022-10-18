@@ -56,7 +56,7 @@
         :buttonText="'Save Changes'"
         :class="'w-full'"
         @click.stop
-        @click="getAllData(task)"
+        @click="saveTask(task)"
       />
     </div>
   </div>
@@ -107,7 +107,7 @@ export default {
     },
   },
   methods: {
-    getAllData(task) {
+    saveTask(task) {
       let myForm = document.getElementById("frm");
       let formData = new FormData(myForm);
       const data = {};

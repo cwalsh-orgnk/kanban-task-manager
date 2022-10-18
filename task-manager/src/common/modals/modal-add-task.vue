@@ -133,27 +133,6 @@ export default {
       };
       this.defaultSubtasks.push(subtask);
     },
-    removeSubtask(subtask, index) {
-      this.defaultSubtasks.splice(index, 1);
-    },
-    addTaskDB(id) {
-      console.log(`addTaskDB`);
-      API.post("tasksApi", `/tasks`, {
-        body: {
-          id: id,
-          boards: this.boards.boards,
-          tasks: this.boards.tasks,
-          example: "example",
-        },
-      })
-        .then((result) => {
-          console.log(result);
-          this.lastTodoId = JSON.parse(result.body).id;
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    },
     saveTask() {
       let subtasks = [];
       this.defaultSubtasks.forEach((element) => {
@@ -165,7 +144,6 @@ export default {
           subtasks.push(subtask);
         }
       });
-      console.log(subtasks);
       var task = {
         title: this.newTask.title,
         description: this.newTask.description,
@@ -173,13 +151,28 @@ export default {
         status: "Todo",
         board: this.activeBoard,
       };
-      console.log(this.boards);
       this.addTaskUI(this.boards.tasks, task);
       this.addTaskDB(this.boards.id);
-      this.close();
     },
     addTaskUI(taskList, task) {
       taskList.push(task);
+    },
+    addTaskDB(id) {
+      console.log(`addTaskDB`);
+      API.post("tasksApi", `/tasks`, {
+        body: {
+          id: id,
+          boards: this.boards.boards,
+          tasks: this.boards.tasks,
+        },
+      })
+        .then((result) => {
+          console.log(result);
+          this.close();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
     initNewTask() {
       this.submitted = false;

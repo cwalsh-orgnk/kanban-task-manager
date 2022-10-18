@@ -121,7 +121,9 @@ export default {
       if (this.subtasksList != compareSubtasks) {
         this.updateTaskDB(this.boards.id);
       }
-      this.$emit("close");
+      if (this.subtasksList === compareSubtasks || this.orgnialStatus === this.newStatus) {
+        this.$emit("close");
+      }
     },
     options() {
       this.showOptions = !this.showOptions;
@@ -141,17 +143,16 @@ export default {
     },
     updateTaskDB(id) {
       if (!id) return;
-      console.log(`updateTaskDB-${id}`);
       API.put("tasksApi", `/tasks`, {
         body: {
           id: id,
           boards: this.boards.boards,
           tasks: this.boards.tasks,
-          example: "example",
         },
       })
         .then((result) => {
           console.log(result);
+          this.$emit("close");
         })
         .catch((err) => {
           console.log(err);
