@@ -81,7 +81,7 @@ export default {
     filteredStatusList() {
       if (this.activeBoard === null) return;
       const availableStatus = [];
-      this.filteredTasksList[0].columns.forEach((element) => {
+      this.boardColumnsList[0].columns.forEach((element) => {
         availableStatus.push(element.name);
       });
       return availableStatus;

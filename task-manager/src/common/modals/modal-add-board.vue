@@ -62,7 +62,7 @@ export default {
     BaseButton,
   },
   props: {
-    boards: Object,
+    taskManager: Object,
   },
   data() {
     return {
@@ -107,8 +107,8 @@ export default {
         name: this.newBoard.name,
         columns: columns.length ? columns : null,
       };
-      this.addTaskUI(this.boards[0].boards, board);
-      this.addTaskDB(this.boards.id);
+      this.addTaskUI(this.allTasks.boards, board);
+      this.addTaskDB(this.allTasks.id);
     },
     addTaskUI(boardList, board) {
       boardList.push(board);
@@ -118,7 +118,8 @@ export default {
       API.post("tasksApi", `/tasks`, {
         body: {
           id: id,
-          boards: this.boards[0].boards,
+          boards: this.allTasks.boards,
+          tasks: this.allTasks.tasks,
         },
       })
         .then((result) => {

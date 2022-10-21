@@ -52,8 +52,8 @@
         <div class="select-wrapper dark:text-white">
           <SelectInput
             @change="selected($event)"
-            :defaultOption="task.status"
-            :options="filteredStatusList"
+            :options="this.currentColumns"
+            :selected="task.status"
           />
         </div>
       </section>
@@ -64,6 +64,7 @@
 import SelectInput from "../form/select-input.vue";
 import CheckboxInput from "../form/checkbox-input.vue";
 import EditDelete from "../tooltips/EditDelete.vue";
+import store from "../../store/store.js";
 import { API } from "aws-amplify";
 import { Amplify } from "aws-amplify";
 import awsconfig from "../../aws-exports";
@@ -84,8 +85,6 @@ export default {
     task: Object,
     subtasks: Object,
     completedTasks: String,
-    boards: Object,
-    filteredTasksList: Array,
   },
   data() {
     return {
@@ -98,17 +97,6 @@ export default {
       subtasksList: JSON.stringify(this.task.subtasks),
     };
   },
-  computed: {
-    filteredStatusList() {
-      const availableStatus = [];
-      this.filteredTasksList[0].columns.forEach((element) => {
-        if (this.task.status != element.name) {
-          availableStatus.push(element.name);
-        }
-      });
-      return availableStatus;
-    },
-  },
   created() {
     let subtasks = this.task.subtasks;
     return subtasks;
@@ -118,10 +106,10 @@ export default {
       const compareSubtasks = JSON.stringify(this.task.subtasks);
       if (this.orgnialStatus !== this.newStatus) {
         task.status = this.newStatus;
-        this.updateTaskDB(this.boards.id);
+        this.updateTaskDB();
       }
       if (this.subtasksList != compareSubtasks) {
-        this.updateTaskDB(this.boards.id);
+        this.updateTaskDB();
       }
       if (this.subtasksList === compareSubtasks || this.orgnialStatus === this.newStatus) {
         this.$emit("close");
@@ -143,13 +131,11 @@ export default {
     selected(event) {
       this.newStatus = event.target.value;
     },
-    updateTaskDB(id) {
-      if (!id) return;
+    updateTaskDB() {
       API.put("tasksApi", `/tasks`, {
         body: {
-          id: id,
-          boards: this.boards.boards,
-          tasks: this.boards.tasks,
+          boards: this.allTasks.boards,
+          tasks: this.allTasks.tasks,
         },
       })
         .then((result) => {
@@ -160,6 +146,13 @@ export default {
           console.log(err);
         });
     },
+  },
+  setup() {
+    const { state } = store();
+
+    return {
+      ...state,
+    };
   },
 };
 </script>

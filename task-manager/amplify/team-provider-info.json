@@ -19,7 +19,7 @@
       "function": {
         "tasksLambda": {
           "deploymentBucketName": "amplify-taskmanager-dev-154131-deployment",
-          "s3Key": "amplify-builds/tasksLambda-6b46755a7a34756c6a70-build.zip"
+          "s3Key": "amplify-builds/tasksLambda-486a3563766d2f45394c-build.zip"
         }
       },
       "storage": {

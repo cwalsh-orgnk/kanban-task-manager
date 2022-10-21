@@ -3,7 +3,6 @@
     class="fixed w-full top-o bg-white z-50 h-24 flex items-center px-10 top-0 border-b border-solid transition-colors border-linesLight dark:border-lines dark:bg-darkGray"
   >
     <slot></slot>
-    <h1 class="text-xl black font-bold dark:text-white" v-if="task">{{ task }}</h1>
     <BaseButton
       :buttonText="'+ Add New Task'"
       :class="this.addTaskButtonClass"
@@ -23,12 +22,7 @@
     </div>
   </header>
   <transition name="slide-fade">
-    <TaskAddNew
-      v-show="isAddNewModalVisible"
-      :boards="boards[0]"
-      @close="closeAddNewModal"
-      :filteredTasksList="filteredTasksList"
-    />
+    <TaskAddNew v-show="isAddNewModalVisible" @close="closeAddNewModal" />
   </transition>
 </template>
 <script>
@@ -46,7 +40,6 @@ export default {
   },
   props: {
     msg: String,
-    boards: Object,
   },
   data() {
     return {
@@ -59,17 +52,11 @@ export default {
     addTaskButtonClass() {
       return this.activeBoard === null ? "opacity-25" : "active";
     },
-    filteredTasksList() {
-      const filteredTasks = this.boards[0].boards.filter((board) =>
-        board.name.includes(this.activeBoard)
-      );
-      return filteredTasks;
-    },
   },
   methods: {
     closeAddNewModal() {
       if (this.listUpdated === true) {
-        this.$emit("listUpdated", this.task);
+        this.$emit("listUpdated", this.allTasks);
       }
       this.isAddNewModalVisible = false;
     },

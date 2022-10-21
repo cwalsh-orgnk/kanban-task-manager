@@ -15,10 +15,8 @@
       @edit="editModal"
       :task="task"
       :subtasks="task.subtasks"
-      :boards="boards"
       :key="task.title"
       :completedTasks="calculateCompletedTasks(task)"
-      :filteredTasksList="filteredTasksList"
     />
   </transition>
   <transition name="slide-fade">
@@ -27,12 +25,9 @@
       @close="closeEditModal"
       @edit="editModal"
       :task="task"
-      :boards="boards"
       :subtasks="task.subtasks"
       :key="task.title"
       :completedTasks="calculateCompletedTasks(task)"
-      @listUpdated="haslistUpdated"
-      :filteredTasksList="filteredTasksList"
     />
   </transition>
 </template>
@@ -52,8 +47,8 @@ export default {
   },
   props: {
     task: Object,
-    filteredTasksList: Array,
-    boards: String,
+    currentStatusList: Array,
+    taskManager: Object,
   },
   data() {
     return {
@@ -72,14 +67,8 @@ export default {
       });
       return `${counter} of ${tasks.subtasks.length} subtasks`;
     },
-    openTask(task) {
-      return task;
-    },
     showTaskDetailsModal() {
       this.isDetailsModalVisible = true;
-    },
-    haslistUpdated(haslistUpdated) {
-      this.listUpdated = haslistUpdated;
     },
     closeDetailsModal() {
       if (this.listUpdated === true) {

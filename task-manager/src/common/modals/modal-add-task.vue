@@ -55,7 +55,7 @@
       <div class="select-wrapper mb-6">
         <SelectInput
           @change="selected(task, $event)"
-          :options="filteredStatusList"
+          :options="this.currentColumns"
           :name="'status'"
         />
       </div>
@@ -90,8 +90,8 @@ export default {
   },
   props: {
     completedTasks: String,
-    filteredTasksList: Array,
-    boards: Object,
+    currentStatusList: Array,
+    taskManager: Object,
   },
   data() {
     return {
@@ -119,11 +119,13 @@ export default {
     };
   },
   computed: {
-    filteredStatusList() {
+    statusList() {
       const availableStatus = [];
-      this.filteredTasksList[0].columns.forEach((element) => {
-        availableStatus.push(element.name);
-      });
+      if (this.currentStatusList) {
+        // this.currentStatusList[0].columns.forEach((element) => {
+        //   availableStatus.push(element.name);
+        // });
+      }
       return availableStatus;
     },
   },
@@ -153,19 +155,24 @@ export default {
         status: "Todo",
         board: this.activeBoard,
       };
-      this.addTaskUI(this.boards.tasks, task);
-      this.addTaskDB(this.boards.id);
+      this.addTaskUI(this.allTasks, task);
+      this.addTaskDB(this.allTasks.id);
     },
     addTaskUI(taskList, task) {
-      taskList.push(task);
+      console.log(taskList);
+      if ("tasks" in taskList) {
+        taskList.tasks.push(task);
+      } else {
+        (taskList ??= {}).tasks ??= [task];
+      }
     },
     addTaskDB(id) {
       console.log(`addTaskDB`);
       API.post("tasksApi", `/tasks`, {
         body: {
           id: id,
-          boards: this.boards.boards,
-          tasks: this.boards.tasks,
+          boards: this.allTasks.boards,
+          tasks: this.allTasks.tasks,
         },
       })
         .then((result) => {

@@ -47,10 +47,9 @@
         <h5 class="text-xs text-mediumGray font-bold mt-6 mb-2 dark:text-white">Current Status</h5>
         <div class="select-wrapper mb-6">
           <SelectInput
-            @change="selected(task, $event)"
-            :defaultOption="task.status"
-            :options="filteredStatusList"
-            :name="'status'"
+            @change="selected($event)"
+            :options="this.currentColumns"
+            :selected="task.status"
           />
         </div>
       </form>
@@ -69,6 +68,7 @@ import TextInput from "../form/text-input.vue";
 import TextArea from "../form/textarea-input.vue";
 import SelectInput from "../form/select-input.vue";
 import RemoveButton from "../buttons/remove-button.vue";
+import store from "../../store/store.js";
 
 export default {
   name: "TaskDetails",
@@ -85,7 +85,7 @@ export default {
   props: {
     task: Object,
     completedTasks: String,
-    filteredTasksList: Array,
+    boardColumnsList: Array,
   },
   data() {
     return {
@@ -100,9 +100,9 @@ export default {
   computed: {
     filteredStatusList() {
       const availableStatus = [];
-      this.filteredTasksList[0].columns.forEach((element) => {
-        if (this.task.status != element.name) {
-          availableStatus.push(element.name);
+      this.currentColumns.forEach((element) => {
+        if (this.task.status != element) {
+          availableStatus.push(element);
         }
       });
       return availableStatus;
@@ -137,6 +137,13 @@ export default {
     selected(task, event) {
       task.status = event.target.value;
     },
+  },
+  setup() {
+    const { state } = store();
+
+    return {
+      ...state,
+    };
   },
 };
 </script>

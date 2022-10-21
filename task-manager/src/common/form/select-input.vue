@@ -8,7 +8,12 @@
     <option v-if="defaultOption" :value="defaultOption">
       {{ defaultOption }}
     </option>
-    <option v-for="option in options" v-bind:key="option" :value="option">
+    <option
+      v-for="option in options"
+      v-bind:key="option"
+      :value="option"
+      :selected="setSelected(option)"
+    >
       {{ option }}
     </option>
   </select>
@@ -20,6 +25,16 @@ export default {
     options: Object,
     defaultOption: String,
     checked: String,
+    selected: String,
+  },
+  methods: {
+    setSelected(option) {
+      if (option === this.selected) {
+        return "selected";
+      } else {
+        return false;
+      }
+    },
   },
 };
 </script>

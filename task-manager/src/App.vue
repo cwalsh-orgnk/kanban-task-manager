@@ -1,11 +1,8 @@
 <template>
   <div id="app" :class="lightMode ? 'light' : 'dark bg-veryDarkGray'">
     <authenticator>
-      <template v-slot="{ user }" v-if="boards != null && Object.keys(boards).length > 0">
-        <HeaderMain :user="user" :boards="this.boards">
-          <NavSidebar :boards="this.boards" />
-        </HeaderMain>
-        <TasksList :user="user" :boards="this.boards" />
+      <template v-slot="{ user }" v-if="allTasks != null && Object.keys(allTasks).length">
+        <AppWrap :user="user"> </AppWrap>
       </template>
     </authenticator>
   </div>
@@ -16,40 +13,29 @@ import { Authenticator } from "@aws-amplify/ui-vue";
 import "@aws-amplify/ui-vue/styles.css";
 import { Amplify } from "aws-amplify";
 import awsconfig from "./aws-exports";
-import { API } from "aws-amplify";
-import HeaderMain from "./common/header-main.vue";
-import NavSidebar from "./common/nav-sidebar.vue";
-import TasksList from "./common/task-list.vue";
+import AppWrap from "./common/app-wrap.vue";
 import store from "./store/store.js";
 
 Amplify.configure(awsconfig);
 export default {
   name: "app",
   components: {
-    HeaderMain,
-    NavSidebar,
-    TasksList,
     Authenticator,
+    AppWrap,
   },
   data() {
     return {
       user: {},
       lastTodoId: "",
-      boards: {},
     };
   },
-  mounted() {
-    this.getAll();
-  },
-  methods: {
-    getAll() {
-      API.get("tasksApi", `/tasks`, {})
-        .then((result) => {
-          this.boards = JSON.parse(result.body);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+  computed: {
+    taskManagerAvailable() {
+      if (this.allTasks != null && Object.keys(this.allTasks).length) {
+        return true;
+      } else {
+        return false;
+      }
     },
   },
   setup() {

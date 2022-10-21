@@ -3,14 +3,10 @@
     class="bg-lightGray transition-all dark:bg-veryDarkGray"
     :class="[sidebarOpen ? activeClass : hiddenClass]"
   >
-    <div
-      v-for="board in filteredTasksList"
-      v-bind:key="board.name"
-      class="column-container flex p-6 mt-24 h-[100vh] overflow-y-scroll"
-    >
+    <div class="column-container flex p-6 mt-24 h-[100vh] overflow-y-scroll">
       <div
-        v-for="(column, index) in board.columns"
-        v-bind:key="column.name"
+        v-for="(column, index) in this.currentColumns"
+        v-bind:key="column"
         class="column mt-6 w-[280px] min-w-[280px]"
       >
         <h3 class="font-bold flex text-xs tracking-widest mb-6 text-mediumGray">
@@ -18,14 +14,12 @@
             class="icon w-[15px] h-[15px] min-w-[15px] mr-3 bg-mainPurple rounded-full"
             :style="{ backgroundColor: columnColors(index) }"
           ></i>
-          {{ column.name }}
+          {{ column }}
         </h3>
         <TaskCard
-          v-for="task in filteredTaskList(column.name, board.name)"
+          v-for="task in filteredTaskList(column, this.activeBoard)"
           :key="task.title"
           :task="task"
-          :boards="boards[0]"
-          :filteredTasksList="filteredTasksList"
           class="task py-6 px-4 flex flex-col justify-center items-start text-left bg-white mb-5 rounded-lg w-full max-w-[calc(100%-1rem)] shadow"
         ></TaskCard>
       </div>
@@ -47,23 +41,13 @@ export default {
   components: {
     TaskCard,
   },
-  props: {
-    boards: Object,
-  },
   data() {
     return {
       activeClass: "list-container sidebar-active relative left-[300px] max-w-[calc(100%-300px)]",
       hiddenClass: "list-container sidebar-hidden left-0",
     };
   },
-  computed: {
-    filteredTasksList() {
-      const filteredTasks = this.boards[0].boards.filter((board) =>
-        board.name.includes(this.activeBoard)
-      );
-      return filteredTasks;
-    },
-  },
+  computed: {},
   methods: {
     columnColors(index) {
       const columnColors = ["#49C4E5", "#8471F2", "#67E2AE"];
@@ -77,19 +61,12 @@ export default {
       }
     },
     filteredTaskList(status, board) {
-      const currentBoardTasks = this.boards[0].tasks.filter(
-        (task) => task.status === status && task.board === board
-      );
-      return currentBoardTasks;
-    },
-    calculateCompletedTasks(tasks) {
-      let counter = 0;
-      tasks.subtasks.forEach((element) => {
-        if (element.isCompleted === true) {
-          counter++;
-        }
-      });
-      return `${counter} of ${tasks.subtasks.length} subtasks`;
+      if (this.allTasks.tasks) {
+        const currentBoardTasks = this.allTasks.tasks.filter(
+          (task) => task.status === status && task.board === board
+        );
+        return currentBoardTasks;
+      }
     },
   },
   setup() {

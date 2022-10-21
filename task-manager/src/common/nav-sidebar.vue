@@ -3,7 +3,7 @@
     class="logo relative ml-6 mr-8 flex items-center h-full border-r border-solid border-linesLight dark:border-lines"
     :class="[sidebarOpen ? logoPaddingRight : logoPaddingRightNone]"
   >
-    <img :src="image" />
+    <img :src="logo" />
   </div>
   <aside
     :class="[sidebarOpen ? activeClass : hiddenClass]"
@@ -13,8 +13,8 @@
       >All boards ( 3 )</span
     >
     <nav class="mr-6">
-      <ul v-if="boards != null && Object.keys(boards).length > 0">
-        <li v-for="board in boards[0].boards" :key="board.name">
+      <ul v-if="allTasks != null && Object.keys(allTasks).length > 0">
+        <li v-for="board in allTasks.boards" :key="board.name">
           <button
             :class="[this.activeBoard === board.name ? activeBoardClass : hiddenBoardClass]"
             @click="showBoard(board.name)"
@@ -69,20 +69,14 @@
     <AddBoard
       v-if="isAddBoardModalVisible"
       @close="closeAddBoardModal"
-      :boards="boards"
-      :filteredTasksList="filteredTasksList"
+      :boardColumnsList="boardColumnsList"
     />
   </transition>
 </template>
 
 <script>
-import { API } from "aws-amplify";
-import { Amplify } from "aws-amplify";
-import awsconfig from "./../aws-exports";
 import store from "../store/store.js";
 import AddBoard from "./modals/modal-add-board.vue";
-
-Amplify.configure(awsconfig);
 
 export default {
   name: "NavSidebar",
@@ -91,7 +85,6 @@ export default {
   },
   props: {
     msg: String,
-    boards: Object,
   },
   data() {
     return {
@@ -120,7 +113,7 @@ export default {
     },
   },
   computed: {
-    image() {
+    logo() {
       return this.lightMode
         ? require("../assets/logo-dark.svg")
         : require("../assets/logo-light.svg");
@@ -129,7 +122,6 @@ export default {
   methods: {
     toggleTheme() {
       this.lightMode = !this.lightMode;
-      console.log(this.lightMode);
     },
     showAddBoardModal() {
       this.isAddBoardModalVisible = true;
@@ -138,22 +130,10 @@ export default {
       this.sidebarOpen = !this.sidebarOpen;
     },
     showBoard(board) {
-      console.log(board);
-      console.log(this.activeBoard);
       this.activeBoard = board;
     },
     closeAddBoardModal() {
       this.isAddBoardModalVisible = false;
-    },
-    getTodos() {
-      console.log("getTodos");
-      API.get("tasksApi", `/tasks`, {})
-        .then((result) => {
-          console.log(JSON.parse(result.body));
-        })
-        .catch((err) => {
-          console.log(err);
-        });
     },
   },
   setup() {

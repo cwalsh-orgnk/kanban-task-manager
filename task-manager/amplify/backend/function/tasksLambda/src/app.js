@@ -3,7 +3,6 @@ var awsServerlessExpressMiddleware = require("aws-serverless-express/middleware"
 var bodyParser = require("body-parser");
 var express = require("express");
 // eslint-disable-next-line prettier/prettier
-const {"v4": uuidv4} = require('uuid');
 
 AWS.config.update({ region: process.env.TABLE_REGION });
 
@@ -36,12 +35,17 @@ const getUserId = (request) => {
 app.get("/tasks", function (request, response) {
   let params = {
     TableName: tableName,
+    Key: {
+      id: getUserId(request),
+    },
     limit: 100,
   };
   dynamodb.scan(params, (error, result) => {
     if (error) {
+      response.json({ statusCode: 500, error: error.message, message: getUserId(request) });
       response.json({ statusCode: 500, error: error.message });
     } else {
+      console.log();
       response.json({ statusCode: 200, url: request.url, body: JSON.stringify(result.Items) });
     }
   });
@@ -51,12 +55,12 @@ app.get("/tasks/:id", function (request, response) {
   let params = {
     TableName: tableName,
     Key: {
-      id: request.params.id,
+      id: getUserId(request),
     },
   };
   dynamodb.get(params, (error, result) => {
     if (error) {
-      response.json({ statusCode: 500, error: error.message });
+      response.json({ statusCode: 500, error: error.message, message: getUserId(request) });
     } else {
       response.json({ statusCode: 200, url: request.url, body: JSON.stringify(result.Item) });
     }
@@ -68,7 +72,7 @@ app.put("/tasks", function (request, response) {
   const params = {
     TableName: tableName,
     Key: {
-      id: request.body.id,
+      id: getUserId(request),
     },
     ExpressionAttributeNames: { "#boards": "boards" },
     ExpressionAttributeValues: {},
@@ -102,7 +106,7 @@ app.post("/tasks", function (request, response) {
     TableName: tableName,
     Item: {
       ...request.body,
-      id: uuidv4(), // auto-generate id
+      id: getUserId(request), // auto-generate id
       complete: false, // default for new tasks
       createdAt: timestamp,
       updatedAt: timestamp,
