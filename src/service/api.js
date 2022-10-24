@@ -1,23 +1,25 @@
-import http from "../http-common";
 import { Amplify } from "aws-amplify";
-import awsconfig from "./aws-exports";
+import awsconfig from "./../aws-exports";
 import { API } from "aws-amplify";
 
 Amplify.configure(awsconfig);
-class BoardDataService {
+class TaskDataService {
   getAll() {
-    API.get("todosApi", `/todos`, {})
+    let tasks = null;
+    API.get("tasksApi", `/tasks`, {})
       .then((result) => {
         console.log(result);
+        tasks = JSON.parse(result.body);
       })
       .catch((err) => {
         console.log(err);
       });
+    return tasks;
   }
   get(id) {
-    API.get("todosApi", `/todos/${id}`, {})
+    API.get("tasksApi", `/tasks/${id}`, {})
       .then((result) => {
-        console.log(result);
+        console.log(JSON.parse(result.body));
       })
       .catch((err) => {
         console.log(err);
@@ -26,8 +28,8 @@ class BoardDataService {
 
   create(data) {
     console.log(`addTodo`);
-    API.post("todosApi", `/todos`, {
-        data
+    API.post("tasksApi", `/tasks`, {
+      data,
     })
       .then((result) => {
         console.log(result);
@@ -38,10 +40,10 @@ class BoardDataService {
       });
   }
 
-  update(id, data, example) {
+  update(id, data) {
     if (!id) return;
     console.log(`updateTodo-${id}`);
-    API.put('todosApi', `/todos`, {
+    API.put("tasksApi", `/tasks`, {
       body: {
         id: id,
         data,
@@ -59,7 +61,7 @@ class BoardDataService {
   delete(id) {
     if (!id) return;
     console.log(`deleteTodo-${id}`);
-    API.del("todosApi", `/todos/${id}`, {})
+    API.del("tasksApi", `/tasks/${id}`, {})
       .then((result) => {
         console.log(result);
         this.lastTodoId = "";
@@ -68,14 +70,6 @@ class BoardDataService {
         console.log(err);
       });
   }
-
-  deleteAll() {
-    return http.delete(`/boards`);
-  }
-
-  findByTitle(title) {
-    return http.get(`/boards?title=${title}`);
-  }
 }
 
-export default new BoardDataService();
+export default new TaskDataService();

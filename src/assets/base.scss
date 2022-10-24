@@ -1,0 +1,181 @@
+@import "./mixins.scss";
+
+@font-face {
+    font-family: "ui-icons";
+    src: url("../../assets/orgnk-ui-icons/ui-icons.woff2") format("woff2"),
+      url("../../assets/orgnk-ui-icons/ui-icons.woff") format("woff");
+    font-weight: normal;
+    font-style: normal;
+    font-display: block;
+  }
+  $focus-ring-weight: 2px;
+  $focus-ring-color: #89b3f3;
+  $focus-ring: 0 0 0 $focus-ring-weight $focus-ring-color,
+    inset 0 0 0 $focus-ring-weight white;
+  $focus-ring-inset: inset 0 0 0 $focus-ring-weight $focus-ring-color,
+    inset 0 0 0 ($focus-ring-weight * 2) white;
+
+  $checkbox-radio-size: 20px;
+  // Shared radio button and checkbox styling
+  input[type="radio"],
+  input[type="checkbox"] {
+    position: absolute;
+    -webkit-appearance: none;
+    appearance: none;
+    height: 1px;
+    width: 1px;
+    clip: rect(1px, 1px, 1px, 1px);
+    opacity: 0;
+    cursor: pointer;
+
+    & + label {
+      position: relative;
+      display: block;
+      padding: 0 0 0 ($checkbox-radio-size + 15px);
+      cursor: pointer;
+
+      &:before {
+        content: "";
+        position: absolute;
+        top: 2px;
+        left: 0;
+        display: inline-block;
+        width: $checkbox-radio-size;
+        height: $checkbox-radio-size;
+        border: 0.5px solid #828fa3;
+        border-radius: (4px / 2);
+        @include transition();
+
+        @include breakpoint(xs) {
+          top: 3px;
+        }
+      }
+
+      &:after {
+        content: "";
+        display: block;
+        position: absolute;
+        top: 2px;
+        left: 0;
+        width: $checkbox-radio-size;
+        height: $checkbox-radio-size;
+        opacity: 0;
+        @include transition(opacity, transform);
+
+        @include breakpoint(xs) {
+          top: 3px;
+        }
+      }
+
+      @include on-state(hover, focus) {
+        &:before {
+          border-color: #635fc7;
+        }
+      }
+
+      .inputs-light & {
+        @include on-state(hover, focus) {
+          &:before {
+            background-color: rgba(white, 0.5);
+          }
+        }
+      }
+    }
+
+    // Manually add a focus ring to the psuedo element for keyboard users, because it cannot naturally receive focus
+    [data-whatintent="keyboard"] & {
+      &:focus + label {
+        &:before {
+          border-color: #828fa3;
+          box-shadow: $focus-ring;
+        }
+      }
+    }
+  }
+
+  // Checkboxes
+  input[type="checkbox"] {
+    & + label {
+      &:after {
+        @include pseudo-icon(e018, strip-unit($checkbox-radio-size), white);
+        padding: 0 !important;
+        transform: scale(0.5);
+      }
+    }
+
+    &:checked {
+      & + label {
+        &:after {
+          opacity: 1;
+
+          .inputs-light & {
+            color: white;
+          }
+        }
+        &:before {
+          background-color: #635fc7;
+
+          .inputs-light & {
+            color: white;
+          }
+        }
+      }
+    }
+  }
+
+  // Select elements
+select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background: none;
+    border: 1px solid #d9dadc;
+    border-radius: 6px;
+    cursor: text;
+    display: block;
+    height: 40px;
+    line-height: 1.5;
+    overflow: hidden;
+    padding: 0 15px;
+    position: relative;
+    transition: all .3s ease-in-out;
+    width: 100%;
+	vertical-align: middle;
+	cursor: pointer;
+
+	&:not([multiple]) {
+		padding-right: 40px;
+		@include select-arrow(#635FC7);
+		background-repeat: no-repeat;
+		background-position: right 15px top 53%;
+		background-size: 10px;
+	}
+
+	.inputs-light & {
+		color: white;
+
+		&:not([multiple]) {
+			@include select-arrow(white);
+		}
+	}
+
+	&[multiple] {
+		padding: 0;
+		height: auto;
+
+		option {
+			padding: 10px 15px;
+		}
+	}
+
+	// Remove the dotted outline FireFox puts on select elements when focused
+	&:-moz-focusring {
+		color: transparent;
+		text-shadow: 0 0 0 blue;
+	}
+
+	&:-moz-focusring * {
+		color: blue;
+		text-shadow: none;
+	}
+}

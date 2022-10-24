@@ -1,0 +1,33 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-taskmanager-dev-154131-authRole",
+      "UnauthRoleArn": "arn:aws:iam::631622373977:role/amplify-taskmanager-dev-154131-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::631622373977:role/amplify-taskmanager-dev-154131-authRole",
+      "Region": "ap-northeast-1",
+      "DeploymentBucketName": "amplify-taskmanager-dev-154131-deployment",
+      "UnauthRoleName": "amplify-taskmanager-dev-154131-unauthRole",
+      "StackName": "amplify-taskmanager-dev-154131",
+      "StackId": "arn:aws:cloudformation:ap-northeast-1:631622373977:stack/amplify-taskmanager-dev-154131/4c3cf740-4a01-11ed-829e-0a11eb516279",
+      "AmplifyAppId": "d36lqset2ks20y",
+      "APIGatewayAuthURL": "https://s3.amazonaws.com/amplify-taskmanager-dev-154131-deployment/amplify-cfn-templates/api/APIGatewayAuthStack.json"
+    },
+    "categories": {
+      "auth": {
+        "taskmanager2552f761": {}
+      },
+      "function": {
+        "tasksLambda": {
+          "deploymentBucketName": "amplify-taskmanager-dev-154131-deployment",
+          "s3Key": "amplify-builds/tasksLambda-576443594458594d3744-build.zip"
+        }
+      },
+      "storage": {
+        "taskBoard": {}
+      },
+      "api": {
+        "tasksApi": {}
+      }
+    }
+  }
+}

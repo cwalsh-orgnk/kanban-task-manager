@@ -1,9 +1,8 @@
 <template>
-  <div id="app">
+  <div id="app" :class="lightMode ? 'light' : 'dark bg-veryDarkGray'">
     <authenticator>
-      <template v-slot="{ user, signOut }">
-        <h1>Hello {{ user.username }}!</h1>
-        <button @click="signOut">Sign Out</button>
+      <template v-slot="{ user }" v-if="allTasks != null && Object.keys(allTasks).length">
+        <AppWrap :user="user"> </AppWrap>
       </template>
     </authenticator>
   </div>
@@ -14,82 +13,37 @@ import { Authenticator } from "@aws-amplify/ui-vue";
 import "@aws-amplify/ui-vue/styles.css";
 import { Amplify } from "aws-amplify";
 import awsconfig from "./aws-exports";
-import { API } from 'aws-amplify';
+import AppWrap from "./common/app-wrap.vue";
+import store from "./store/store.js";
 
 Amplify.configure(awsconfig);
 export default {
   name: "app",
+  components: {
+    Authenticator,
+    AppWrap,
+  },
   data() {
     return {
       user: {},
       lastTodoId: "",
     };
   },
-  components: {
-    Authenticator,
+  computed: {
+    taskManagerAvailable() {
+      if (this.allTasks != null && Object.keys(this.allTasks).length) {
+        return true;
+      } else {
+        return false;
+      }
+    },
   },
-  methods: {
-    getTodos: function () {
-      console.log("getTodos");
-      API.get("todosApi", `/todos`, {})
-        .then((result) => {
-          console.log(result);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    },
-    getTodo: function () {
-      const id = this.lastTodoId;
-      if (!id) return;
-      console.log(`getTodo-${id}`);
-    },
-    addTodo: function () {
-      console.log(`addTodo`);
-      API.post("todosApi", `/todos`, {
-        body: {
-          text: "todo1",
-        },
-      })
-        .then((result) => {
-          console.log(result);
-          this.lastTodoId = JSON.parse(result.body).id;
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    },
-    updateTodo: function () {
-      const id = this.lastTodoId;
-      if (!id) return;
-      console.log(`updateTodo-${id}`);
-      API.put("todosApi", `/todos`, {
-        body: {
-          id: id,
-          text: "todo2",
-          complete: true,
-        },
-      })
-        .then((result) => {
-          console.log(result);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    },
-    deleteTodo: function () {
-      const id = this.lastTodoId;
-      if (!id) return;
-      console.log(`deleteTodo-${id}`);
-      API.del("todosApi", `/todos/${id}`, {})
-        .then((result) => {
-          console.log(result);
-          this.lastTodoId = "";
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    },
+  setup() {
+    const { state } = store();
+
+    return {
+      ...state,
+    };
   },
 };
 </script>
