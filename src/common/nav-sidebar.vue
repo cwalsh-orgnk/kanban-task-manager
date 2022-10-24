@@ -67,6 +67,7 @@
   <button
     class="fixed bottom-10 left-0 bg-mainPurple rounded-r-full opacity-100"
     :class="[sidebarOpen ? hideButton : showButton]"
+    name="Main Menu"
     @click="showSidebar()"
   >
     <img class="m-[19px] w-[18px] h-[10px]" src="../assets/icon-show-sidebar.svg" />

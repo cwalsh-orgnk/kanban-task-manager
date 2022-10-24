@@ -17,7 +17,7 @@
       {{ buttonText }}
     </button>
     <div class="tooltip-wrap relative">
-      <button type="button" class="btn-close" @click="options">
+      <button type="button" class="btn-close" @click="options" name="Board settings">
         <img src="../assets/icon-vertical-ellipsis.svg" />
       </button>
       <EditDelete

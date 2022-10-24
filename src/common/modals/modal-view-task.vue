@@ -11,7 +11,7 @@
         <h3 class="title text-lg font-bold text-black dark:text-white">
           {{ task.title }}
         </h3>
-        <button type="button" class="btn-close" @click="options">
+        <button type="button" class="btn-close" @click="options" name="Task options">
           <img src="../../assets/icon-vertical-ellipsis.svg" />
         </button>
         <EditDelete
