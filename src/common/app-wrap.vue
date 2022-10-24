@@ -18,7 +18,7 @@ import TasksList from "../common/task-list.vue";
 import EmptyColumns from "../common/empty-columns.vue";
 import store from "../store/store.js";
 export default {
-  name: "app",
+  name: "AppWrap",
   components: {
     HeaderMain,
     NavSidebar,

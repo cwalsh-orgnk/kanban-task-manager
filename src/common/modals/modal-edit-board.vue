@@ -4,15 +4,18 @@
     @click="close"
   >
     <div
-      class="modal max-h-[calc(100vh-100px)] overflow-y-scroll overflow-x-hidden sm:overflow-auto sm:max-h-full bg-white flex flex-col shadow-sm max-w-lg w-full p-8 m-8 text-left dark:bg-darkGray"
+      class="modal max-h-[calc(100vh-100px)] overflow-y-scroll overflow-x-hidden sm:overflow-hidden sm:max-h-full bg-white flex flex-col shadow-sm max-w-lg w-full p-8 m-8 text-left dark:bg-darkGray"
       @click.stop
     >
       <header class="modal-header relative mb-6">
         <h3 class="title text-lg font-bold text-black dark:text-white">Edit Board</h3>
       </header>
       <div class="input-group flex flex-col mb-6">
+        <label for="name" class="text-xs text-mediumGray font-bold mb-2 dark:text-white"
+          >Name</label
+        >
+        <span class="text-red text-sm mb-1" v-if="errors.title">{{ errors.title }}</span>
         <TextInput
-          :label="'Name'"
           :name="'name'"
           v-bind:value="newBoard.name"
           v-on:input="newBoard.name = $event"
@@ -71,9 +74,23 @@ export default {
         name: this.currentBoard[0].name,
         columns: this.currentBoard[0].columns,
       },
+      errors: {
+        title: "",
+      },
     };
   },
   methods: {
+    validateBoard(name) {
+      let formValidated = true;
+
+      if (name == null || name === undefined || !name) {
+        this.errors.title = "Please enter a name";
+        formValidated = false;
+      } else {
+        this.errors.title = null;
+      }
+      return formValidated;
+    },
     addColumn() {
       const column = {
         placeholder: "e.g. Todo/Doing/Done etc",
@@ -101,6 +118,10 @@ export default {
           columnList.push(newColumn);
         }
       });
+
+      if (!this.validateBoard(this.newBoard.name)) {
+        return;
+      }
 
       let board = {
         id: this.newBoard.id,

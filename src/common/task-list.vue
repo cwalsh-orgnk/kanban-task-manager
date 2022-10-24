@@ -71,14 +71,6 @@ export default {
         return "rgb(" + red + ", " + green + ", " + blue + ")";
       }
     },
-    filteredTaskList(status, board) {
-      if (this.allTasks.tasks) {
-        const currentBoardTasks = this.allTasks.tasks.filter(
-          (task) => task.status === status && task.board === board
-        );
-        return currentBoardTasks;
-      }
-    },
     editModal() {
       this.isEditBoardModalVisible = true;
     },

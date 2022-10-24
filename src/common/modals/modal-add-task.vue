@@ -4,15 +4,18 @@
     @click="close"
   >
     <div
-      class="modal max-h-[calc(100vh-100px)] overflow-y-scroll overflow-x-hidden sm:overflow-auto sm:max-h-full bg-white flex flex-col shadow-sm max-w-lg w-full p-8 m-8 text-left dark:bg-darkGray"
+      class="modal max-h-[calc(100vh-100px)] overflow-y-scroll overflow-x-hidden sm:overflow-hidden sm:max-h-full bg-white flex flex-col shadow-sm max-w-lg w-full p-8 m-8 text-left dark:bg-darkGray"
       @click.stop
     >
       <header class="modal-header relative mb-6">
         <h3 class="title text-lg font-bold text-black dark:text-white">Add New Task</h3>
       </header>
       <div class="input-group flex flex-col mb-6">
+        <label for="title" class="text-xs text-mediumGray font-bold mb-2 dark:text-white"
+          >Title</label
+        >
+        <span class="text-red text-sm mb-1" v-if="errors.title">{{ errors.title }}</span>
         <TextInput
-          :label="'Title'"
           :name="'title'"
           v-bind:value="newTask.title"
           v-on:input="newTask.title = $event"
@@ -31,6 +34,7 @@
         <label for="subtask" class="text-xs text-mediumGray font-bold mb-2 dark:text-white"
           >Subtasks</label
         >
+        <span class="text-red text-sm mb-1" v-if="errors.subtask">{{ errors.subtask }}</span>
         <div
           class="input-wrap flex mb-3 items-center"
           v-for="(subtask, index) in defaultSubtasks"
@@ -43,7 +47,10 @@
             v-bind:value="subtask.value"
             v-on:input="subtask.value = $event"
           />
-          <RemoveButton @click="defaultSubtasks.splice(index, 1)" />
+          <RemoveButton
+            v-if="defaultSubtasks.length > 1"
+            @click="removeSubtask(defaultSubtasks, index)"
+          />
         </div>
       </div>
       <BaseButton
@@ -98,6 +105,10 @@ export default {
       showOptions: false,
       showEditTask: false,
       subtasks: [],
+      errors: {
+        title: "",
+        subtask: "",
+      },
       newTask: {
         id: uuid.v4(),
         title: "",
@@ -125,17 +136,43 @@ export default {
       };
       this.defaultSubtasks.push(subtask);
     },
+    removeSubtask(defaultSubtasks, index) {
+      if (defaultSubtasks.length > 1) {
+        defaultSubtasks.splice(index, 1);
+      }
+    },
+    validateTask(title, subtask) {
+      let formValidated = true;
+
+      if (title == null || title === undefined || !title) {
+        this.errors.title = "Please enter a title";
+        formValidated = false;
+      } else {
+        this.errors.title = null;
+      }
+      if (subtask.length === 0) {
+        this.errors.subtask = "Please enter at least one subtask";
+        formValidated = false;
+      } else {
+        this.errors.subtask = null;
+      }
+      return formValidated;
+    },
     saveTask() {
       let subtasks = [];
       this.defaultSubtasks.forEach((element) => {
-        if (element.value != null) {
+        if (element.value) {
           let subtask = {
             title: element.value,
             isCompleted: false,
           };
+          console.log(element.value);
           subtasks.push(subtask);
         }
       });
+      if (!this.validateTask(this.newTask.title, subtasks)) {
+        return;
+      }
       var task = {
         id: this.newTask.id,
         title: this.newTask.title,

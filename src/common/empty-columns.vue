@@ -7,11 +7,14 @@
       class="column-container flex-col flex p-6 mt-0 h-[100vh] overflow-y-scroll justify-center items-center"
     >
       <p class="text-mediumGray">This board is empty. Create a new column to get started.</p>
-      <BaseButton
-        :buttonText="'+ Add New Column'"
-        :class="'mr-auto ml-auto mt-6'"
+
+      <button
+        :class="this.class"
         @click="showEditModalVisible"
-      />
+        class="pt-[15px] pb-[14px] pl-[24px] pr-[25px] text-center bg-mainPurple text-white m-0 mr-auto ml-auto mt-6 flex rounded-full font-bold text-md justify-center"
+      >
+        + Add New Column
+      </button>
       <transition class="slide-fade">
         <EditBoard v-if="isEditBoardModalVisible" @close="closeEditModal"></EditBoard>
       </transition>
@@ -22,13 +25,11 @@
 <script>
 import store from "../store/store.js";
 import EditBoard from "./modals/modal-edit-board.vue";
-import BaseButton from "./buttons/base-button.vue";
 
 export default {
   name: "TasksList",
   components: {
     EditBoard,
-    BaseButton,
   },
   data() {
     return {

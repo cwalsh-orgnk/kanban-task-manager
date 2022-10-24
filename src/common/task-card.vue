@@ -13,7 +13,7 @@
       v-if="isDetailsModalVisible"
       @close="closeDetailsModal"
       @edit="editModal"
-      @delete="deleteModal"
+      @delete="showDeleteModal"
       :task="task"
       :subtasks="task.subtasks"
       :key="task.title"
@@ -24,7 +24,7 @@
     <TaskEditDetails
       v-if="isEditModalVisible"
       @close="closeEditModal"
-      @edit="editModal"
+      @edit="showEditModal"
       :task="task"
       :subtasks="task.subtasks"
       :key="task.title"
@@ -87,14 +87,14 @@ export default {
     closeDetailsModal() {
       this.isDetailsModalVisible = false;
     },
-    closeEditModal() {
-      this.isEditModalVisible = false;
-    },
-    editModal() {
+    showEditModal() {
       this.isDetailsModalVisible = false;
       this.isEditModalVisible = true;
     },
-    deleteModal() {
+    closeEditModal() {
+      this.isEditModalVisible = false;
+    },
+    showDeleteModal() {
       this.isDetailsModalVisible = false;
       this.isDeleteModalVisible = true;
     },
