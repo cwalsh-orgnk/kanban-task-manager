@@ -18,7 +18,7 @@
     </button>
     <div class="tooltip-wrap relative">
       <button type="button" class="btn-close" @click="options" aria-label="Board settings">
-        <img src="../assets/icon-vertical-ellipsis.svg" />
+        <img alt="" src="../assets/icon-vertical-ellipsis.svg" />
       </button>
       <EditDelete
         v-if="this.showOptions"
