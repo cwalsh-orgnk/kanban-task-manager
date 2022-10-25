@@ -19,8 +19,8 @@
         <TaskCard
           v-for="task in column.tasks"
           :key="task.title"
+          :status="column.name"
           :task="task"
-          class="task py-6 px-4 flex flex-col justify-center items-start text-left bg-white mb-5 rounded-lg w-full max-w-[calc(100%-1rem)] shadow"
         ></TaskCard>
       </div>
       <button

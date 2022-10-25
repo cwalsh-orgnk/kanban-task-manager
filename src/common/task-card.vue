@@ -12,10 +12,11 @@
     <TaskDetails
       v-if="isDetailsModalVisible"
       @close="closeDetailsModal"
-      @edit="editModal"
+      @edit="showEditModal"
       @delete="showDeleteModal"
       :task="task"
       :subtasks="task.subtasks"
+      :status="status"
       :key="task.title"
       :completedTasks="calculateCompletedTasks(task)"
     />
@@ -28,6 +29,7 @@
       :task="task"
       :subtasks="task.subtasks"
       :key="task.title"
+      :status="status"
       :completedTasks="calculateCompletedTasks(task)"
     />
   </transition>
@@ -58,6 +60,7 @@ export default {
   },
   props: {
     task: Object,
+    status: String,
     currentStatusList: Array,
     taskManager: Object,
   },
@@ -69,7 +72,15 @@ export default {
       listUpdated: false,
     };
   },
+  computed: {
+    computedStatus() {
+      return this.updateStatus(this.task.status);
+    },
+  },
   methods: {
+    updateStatus(task) {
+      task.status = this.status;
+    },
     calculateCompletedTasks(task) {
       let counter = 0;
       if (task.subtasks) {
