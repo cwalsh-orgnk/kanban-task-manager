@@ -15,7 +15,7 @@
           <img src="../../assets/icon-vertical-ellipsis.svg" />
         </button>
         <EditDelete
-          v-show="this.showOptions"
+          v-if="this.showOptions"
           :editLabel="'Edit Task'"
           :deleteLabel="'Delete Task'"
           @edit="editItem"
@@ -33,14 +33,12 @@
           {{ completedTasks }}
         </h5>
         <ul v-for="(subtask, index) in task.subtasks" v-bind:key="subtask.title">
-          <li
-            class="flex items-center bg-lightGray dark:bg-veryDarkGray p-3 mb-3 transition-colors"
-          >
+          <li class="flex items-center mb-3 transition-colors">
             <CheckboxInput
               :inputName="task.title"
               :inputId="task.title + '-' + subtask.title + '-' + index"
               :checked="subtask.isCompleted"
-              :inputClass="[subtask.isCompleted ? isCompleted : notCompleted]"
+              :inputClass="subtask.isCompleted ? isCompleted : notCompleted"
               @change="check(subtask)"
               :inputLabel="subtask.title"
             />
@@ -79,19 +77,20 @@ export default {
   },
   emits: {
     listUpdated: false,
-    editModal: false,
+    showEditModal: false,
     deleteModal: false,
   },
   props: {
     task: Object,
     subtasks: Object,
     completedTasks: String,
+    status: String,
   },
   data() {
     return {
       isCompleted: "text-mediumGray line-through",
       notCompleted: "dark:text-white",
-      orgnialStatus: this.task.status,
+      originalStatus: this.status,
       newStatus: this.task.status,
       showOptions: false,
       showEditTask: false,
@@ -107,13 +106,14 @@ export default {
       this.allTasks.boards.forEach((board) => {
         if (board.id === this.activeBoard.id) {
           board.columns.forEach((column) => {
-            console.log(this.orgnialStatus);
-            if (column.name === this.orgnialStatus) {
-              column.tasks.forEach((task, index, object) => {
-                if (task.id === currentTask.id) {
-                  object.splice(index, 1);
-                }
-              });
+            if (column.name === this.originalStatus) {
+              if (column.tasks && column.tasks.length > 0) {
+                column.tasks.forEach((task, index, object) => {
+                  if (task.id === currentTask.id) {
+                    object.splice(index, 1);
+                  }
+                });
+              }
             }
           });
         }
@@ -122,7 +122,11 @@ export default {
         if (board.id === this.activeBoard.id) {
           board.columns.forEach((column, index, object) => {
             if (column.name === currentTask.status) {
-              object[index].tasks.push(currentTask);
+              if ("tasks" in column) {
+                object[index].tasks.push(currentTask);
+              } else {
+                (object[index] ??= {}).tasks ??= [currentTask];
+              }
             }
           });
         }
@@ -130,7 +134,7 @@ export default {
     },
     close(task) {
       const compareSubtasks = JSON.stringify(this.task.subtasks);
-      if (this.orgnialStatus !== this.newStatus) {
+      if (this.originalStatus !== this.newStatus) {
         task.status = this.newStatus;
         this.updateTaskDB();
         this.updateList(task);
@@ -138,7 +142,7 @@ export default {
       if (this.subtasksList != compareSubtasks) {
         this.updateTaskDB(task);
       }
-      if (this.subtasksList === compareSubtasks || this.orgnialStatus === this.newStatus) {
+      if (this.subtasksList === compareSubtasks || this.originalStatus === this.newStatus) {
         this.$emit("close");
       }
     },
@@ -183,6 +187,4 @@ export default {
   },
 };
 </script>
-<style lang="scss">
-@import "../../assets/base.scss";
-</style>
+<style lang="scss"></style>

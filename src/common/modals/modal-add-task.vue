@@ -55,14 +55,18 @@
       </div>
       <BaseButton
         :buttonText="'+ Add New Subtask'"
-        :class="'w-full text-mainPurple bg-mainPurple bg-opacity-10 dark:bg-white dark:text-mainPurple'"
+        :class="'w-full text-mainPurple bg-mainPurple bg-opacity-10 transition-colors hover:bg-opacity-25 dark:bg-white dark:text-mainPurple'"
         @click="addSubtask"
       />
       <h5 class="text-xs text-mediumGray font-bold mt-6 mb-2 dark:text-white">Status</h5>
       <div class="select-wrapper mb-6">
         <SelectInput @change="selected($event)" :options="this.currentColumns" :name="'status'" />
       </div>
-      <BaseButton :buttonText="'Save Changes'" :class="'w-full text-white'" @click="saveTask" />
+      <BaseButton
+        :buttonText="'Save Changes'"
+        :class="'w-full text-white transition-colors hover:bg-mainPurpleHover'"
+        @click="saveTask"
+      />
     </div>
   </div>
 </template>
@@ -183,6 +187,23 @@ export default {
       };
       this.addTaskUI(this.allTasks.boards, task);
       this.addTaskDB(this.allTasks.id);
+      this.newTask = {
+        id: uuid.v4(),
+        title: "",
+        description: "",
+        subtasks: [],
+        status: this.currentColumns[0],
+      };
+      this.defaultSubtasks = [
+        {
+          placeholder: "e.g. Make a pot of coffee",
+          value: null,
+        },
+        {
+          placeholder: "e.g. Make a pot of coffee",
+          value: null,
+        },
+      ];
     },
     addTaskUI(boardList, task) {
       boardList.forEach((board) => {
@@ -248,6 +269,4 @@ export default {
   },
 };
 </script>
-<style lang="scss">
-@import "../../assets/base.scss";
-</style>
+<style lang="scss"></style>

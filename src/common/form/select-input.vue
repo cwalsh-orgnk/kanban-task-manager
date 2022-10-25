@@ -1,7 +1,7 @@
 <template>
   <select
     :name="name"
-    class="product-filter-select relative w-full border border-linesLight h-[40px] px-4 pr-10 dark:border-[#828FA3] dark:text-white"
+    class="product-filter-select relative w-full border border-linesLight h-[40px] px-4 pr-10 dark:border-[#828FA3] dark:text-white hover:border-mainPurple"
     :v-bind:value="value"
     v-on:input="$emit('input', $event.target.value)"
   >
@@ -21,6 +21,9 @@
 <script>
 export default {
   name: "SelectInput",
+  emits: {
+    input: null,
+  },
   props: {
     options: Object,
     defaultOption: String,

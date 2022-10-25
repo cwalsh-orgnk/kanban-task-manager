@@ -37,7 +37,7 @@
         </li>
         <li>
           <button
-            class="nav-item w-full pt-[15px] pb-[14px] pl-[24px] pr-[25px] text-cente white m-0 flex items-center text-mainPurple rounded-r-full font-bold text-md"
+            class="nav-item w-full pt-[15px] pb-[14px] pl-[24px] pr-[25px] text-cente white m-0 flex items-center text-mainPurple rounded-r-full font-bold text-md transition-colors hover:bg-mainPurple hover:bg-opacity-10"
             @click="showAddBoardModal"
           >
             <img class="mr-4" src="../assets/icon-board-purple.svg" />
@@ -54,18 +54,23 @@
       >
         <img class="mr-4 w-[25px] min-w-[25px] h-[25px]" src="../assets/icon-light-theme.svg" />
         <label class="switch">
-          <input type="checkbox" checked @click="toggleTheme($event)" />
-          <span class="slider round"></span>
+          <input type="checkbox" class="peer" checked @click="toggleTheme($event)" />
+          <span
+            class="slider peer-checked:bg-mainPurple round hover:bg-mainPurpleHover peer-checked:hover:bg-mainPurpleHover"
+          ></span>
         </label>
         <img class="ml-4 w-[25px] min-w-[25px] h-[25px]" src="../assets/icon-dark-theme.svg" />
       </div>
-      <button class="hidden items-center justify-center md:flex" @click="showSidebar()">
+      <button
+        class="nav-item w-[calc(100%-1.5rem)] pt-[15px] pb-[14px] pl-[24px] pr-[25px] text-cente white m-0 text-mainPurple rounded-r-full font-bold text-md mr-6 hover:bg-opacity-10 hidden items-center justify-center md:flex transition-colors hover:bg-mainPurpleHover"
+        @click="showSidebar()"
+      >
         <img class="mr-4" src="../assets/icon-hide-sidebar.svg" />Hide sidebar
       </button>
     </div>
   </aside>
   <button
-    class="fixed bottom-10 left-0 bg-mainPurple rounded-r-full opacity-100"
+    class="fixed bottom-10 left-0 bg-mainPurple rounded-r-full opacity-100 transition-colors hover:bg-mainPurpleHover"
     :class="[sidebarOpen ? hideButton : showButton]"
     name="Main Menu"
     @click="showSidebar()"
@@ -239,10 +244,6 @@ aside {
   background-color: white;
   -webkit-transition: 0.4s;
   transition: 0.4s;
-}
-
-input:checked + .slider {
-  background-color: #635fc7;
 }
 
 input:focus + .slider {

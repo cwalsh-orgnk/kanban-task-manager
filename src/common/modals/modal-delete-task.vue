@@ -17,12 +17,12 @@
       <div class="actions flex">
         <BaseButton
           :buttonText="'Delete'"
-          :class="'w-[50%] bg-red text-white'"
+          :class="'w-[50%] bg-red text-white transition-colors hover:bg-redHover'"
           @click="removeTask(task)"
         />
         <BaseButton
           :buttonText="'Cancel'"
-          :class="'w-[50%] bg-mainPurple bg-opacity-10 text-mainPurple'"
+          :class="'w-[50%] bg-mainPurple bg-opacity-10 text-mainPurple transition-colors hover:bg-opacity-25'"
           @click="close"
         />
       </div>
@@ -59,18 +59,15 @@ export default {
         if (board.id === this.activeBoard.id) {
           board.columns.forEach((column) => {
             if (column.name === currentTask.status) {
-              column.tasks.forEach((task, index, object) => {
-                if (task.id === currentTask.id) {
-                  object.splice(index, 1);
-                }
-              });
+              if (column.tasks && column.tasks.length > 0) {
+                column.tasks.forEach((task, index, object) => {
+                  if (task.id === currentTask.id) {
+                    object.splice(index, 1);
+                  }
+                });
+              }
             }
           });
-        }
-      });
-      this.allTasks.tasks.forEach((element, index, object) => {
-        if (element.board === this.activeBoard.id) {
-          object.splice(index, 1);
         }
       });
       this.activeBoard = {

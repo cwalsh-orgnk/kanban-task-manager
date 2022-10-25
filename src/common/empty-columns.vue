@@ -11,7 +11,7 @@
       <button
         :class="this.class"
         @click="showEditModalVisible"
-        class="pt-[15px] pb-[14px] pl-[24px] pr-[25px] text-center bg-mainPurple text-white m-0 mr-auto ml-auto mt-6 flex rounded-full font-bold text-md justify-center"
+        class="pt-[15px] pb-[14px] pl-[24px] pr-[25px] text-center bg-mainPurple text-white m-0 mr-auto ml-auto mt-6 flex rounded-full font-bold text-md justify-center hover:bg-mainPurpleHover"
       >
         + Add New Column
       </button>

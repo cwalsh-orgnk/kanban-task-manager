@@ -17,12 +17,13 @@
       <div class="actions flex">
         <BaseButton
           :buttonText="'Delete'"
-          :class="'w-[50%] bg-red text-white'"
+          :class="'w-[50%] bg-red text-white transition-colors hover:bg-redHover'"
           @click="removeBoard"
         />
         <BaseButton
           :buttonText="'Cancel'"
-          :class="'w-[50%] bg-mainPurple bg-opacity-10 text-mainPurple'"
+          :class="'w-[50%] bg-mainPurple bg-opacity-10 text-mainPurple transition-colors hover:bg-opacity-25'"
+          @click="close"
         />
       </div>
     </div>

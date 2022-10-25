@@ -10,54 +10,61 @@
       <header class="modal-header relative mb-6">
         <h3 class="title text-lg font-bold text-black dark:text-white">Edit Task</h3>
       </header>
-      <form id="frm">
-        <div class="input-group flex flex-col mb-6">
-          <TextInput :label="'Title'" :name="'title'" :value="task.title" :v-model="task.title" />
-        </div>
-        <div class="input-group flex flex-col mb-6">
-          <TextArea
-            :name="'description'"
-            :label="'Description'"
-            :value="task.description"
-            :placeholder="'e.g. It’s always good to take a break. This 15 minute break will recharge the batteries a little.'"
-          />
-        </div>
-        <div class="input-group flex flex-col">
-          <label for="subtask" class="text-xs text-mediumGray font-bold mb-2 dark:text-white"
-            >Subtasks</label
-          >
-          <div
-            class="input-wrap flex mb-3 items-center"
-            v-for="(subtask, index) in task.subtasks"
-            v-bind:key="subtask.title"
-          >
-            <TextInput
-              :name="'subtask[' + index + ']'"
-              :value="subtask.title"
-              :inputClass="'mr-4'"
-            />
-            <RemoveButton @click.stop />
-          </div>
-        </div>
-        <BaseButton
-          :buttonText="'+ Add New Subtask'"
-          :class="'w-full text-mainPurple bg-mainPurple bg-opacity-10 dark:bg-white dark:text-mainPurple'"
-          @click.stop
+      <div class="input-group flex flex-col mb-6">
+        <TextInput
+          :label="'Title'"
+          :name="'title'"
+          :value="updatedTask.title"
+          v-on:input="updatedTask.title = $event"
         />
-        <h5 class="text-xs text-mediumGray font-bold mt-6 mb-2 dark:text-white">Current Status</h5>
-        <div class="select-wrapper mb-6">
-          <SelectInput
-            @change="selected($event)"
-            :options="this.currentColumns"
-            :selected="task.status"
+      </div>
+      <div class="input-group flex flex-col mb-6">
+        <TextArea
+          :name="'description'"
+          :label="'Description'"
+          :value="updatedTask.description"
+          v-on:input="updatedTask.description = $event"
+          :placeholder="'e.g. It’s always good to take a break. This 15 minute break will recharge the batteries a little.'"
+        />
+      </div>
+      <div class="input-group flex flex-col">
+        <label for="subtask" class="text-xs text-mediumGray font-bold mb-2 dark:text-white"
+          >Subtasks</label
+        >
+        <div
+          class="input-wrap flex mb-3 items-center"
+          v-for="(subtask, index) in updatedTask.subtasks"
+          v-bind:key="subtask.title"
+        >
+          <TextInput
+            :name="'subtask[' + index + ']'"
+            v-bind:value="subtask.title"
+            v-on:input="subtask.title = $event"
+            :inputClass="'mr-4'"
+          />
+          <RemoveButton
+            v-if="updatedTask.subtasks.length > 1"
+            @click="removeSubtask(updatedTask.subtasks, index)"
           />
         </div>
-      </form>
+      </div>
+      <BaseButton
+        :buttonText="'+ Add New Subtask'"
+        :class="'w-full text-mainPurple bg-mainPurple bg-opacity-10 transition-colors hover:bg-opacity-25 dark:bg-white dark:text-mainPurple'"
+        @click="addSubtask"
+      />
+      <h5 class="text-xs text-mediumGray font-bold mt-6 mb-2 dark:text-white">Current Status</h5>
+      <div class="select-wrapper mb-6">
+        <SelectInput
+          @change="selected($event)"
+          :options="this.currentColumns"
+          :selected="updatedTask.status"
+        />
+      </div>
       <BaseButton
         :buttonText="'Save Changes'"
-        :class="'w-full text-white'"
-        @click.stop
-        @click="saveTask(task)"
+        :class="'w-full text-white transition-colors hover:bg-mainPurpleHover'"
+        @click="saveTask()"
       />
     </div>
   </div>
@@ -69,7 +76,10 @@ import TextArea from "../form/textarea-input.vue";
 import SelectInput from "../form/select-input.vue";
 import RemoveButton from "../buttons/remove-button.vue";
 import store from "../../store/store.js";
-
+import { API } from "aws-amplify";
+import { Amplify } from "aws-amplify";
+import awsconfig from "../../aws-exports";
+Amplify.configure(awsconfig);
 export default {
   name: "TaskDetails",
   components: {
@@ -91,10 +101,19 @@ export default {
     return {
       isCompleted: "text-mediumGray line-through",
       notCompleted: "",
+      updatedTask: {
+        id: this.task.id,
+        title: this.task.title,
+        description: this.task.description,
+        subtasks: this.task.subtasks,
+        status: this.task.status,
+      },
       taskForm: {},
       status: this.task.status,
       showOptions: false,
       showEditTask: false,
+      orgnialStatus: this.status,
+      newStatus: this.status,
     };
   },
   computed: {
@@ -109,19 +128,79 @@ export default {
     },
   },
   methods: {
-    saveTask(task) {
-      let myForm = document.getElementById("frm");
-      let formData = new FormData(myForm);
-      const data = {};
-      // need to convert it before using not with XMLHttpRequest
-      for (let [key, val] of formData.entries()) {
-        Object.assign(data, { [key]: val });
+    addSubtask() {
+      const subtask = {
+        placeholder: "e.g. Make a pot of coffee",
+        title: null,
+      };
+      if (this.updatedTask.subtasks) {
+        this.updatedTask.subtasks.push(subtask);
+      } else {
+        this.updatedTask.subtasks = [
+          {
+            placeholder: "e.g. Make a pot of coffee",
+            title: null,
+          },
+        ];
       }
-      task.title = data["title"];
-      task.description = data["description"];
-      task.subtask = data["subtask"];
-      task.status = data["status"];
+    },
+    removeSubtask(defaultSubtasks, index) {
+      if (defaultSubtasks.length > 1) {
+        defaultSubtasks.splice(index, 1);
+      }
+    },
+    updateList(currentTask) {
+      this.allTasks.boards.forEach((board) => {
+        if (board.id === this.activeBoard.id) {
+          board.columns.forEach((column) => {
+            if (column.name === this.orgnialStatus) {
+              column.tasks.forEach((task, index, object) => {
+                if (task.id === currentTask.id) {
+                  object.splice(index, 1);
+                }
+              });
+            }
+          });
+        }
+      });
+      this.allTasks.boards.forEach((board) => {
+        if (board.id === this.activeBoard.id) {
+          board.columns.forEach((column, index, object) => {
+            if (column.name === currentTask.status) {
+              object[index].tasks.push(currentTask);
+            }
+          });
+        }
+      });
+    },
+    saveTask() {
+      const updatedTask = {
+        id: this.task.id,
+        title: this.updatedTask.title,
+        description: this.updatedTask.description,
+        subtasks: this.updatedTask.subtasks,
+        status: this.updatedTask.status,
+      };
+      console.log(updatedTask);
+      this.updateList(updatedTask);
+      this.updateTaskDB();
+
       this.close();
+    },
+    updateTaskDB() {
+      API.put("tasksApi", `/tasks`, {
+        body: {
+          boards: this.allTasks.boards,
+          tasks: this.allTasks.tasks,
+        },
+      })
+        .then((result) => {
+          console.log(result);
+          this.$emit("close");
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
     close() {
       if (this.status === this.task.status) {
@@ -134,8 +213,8 @@ export default {
     check(subtask) {
       subtask.isCompleted = !subtask.isCompleted;
     },
-    selected(task, event) {
-      task.status = event.target.value;
+    selected(event) {
+      this.newStatus = event.target.value;
     },
   },
   setup() {
@@ -147,6 +226,4 @@ export default {
   },
 };
 </script>
-<style lang="scss">
-@import "../../assets/base.scss";
-</style>
+<style lang="scss"></style>
