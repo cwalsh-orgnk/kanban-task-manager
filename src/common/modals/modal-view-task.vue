@@ -4,14 +4,20 @@
     @click="close(task)"
   >
     <div
-      class="modal max-h-[calc(100vh-100px)] overflow-y-scroll overflow-x-hidden sm:overflow-hidden sm:max-h-full bg-white flex flex-col shadow-sm max-w-md w-full p-8 m-8 z-90 text-left dark:bg-darkGray"
+      class="modal max-h-[calc(100vh-100px)] overflow-y-scroll overflow-x-hidden sm:overflow-visible sm:max-h-full bg-white flex flex-col shadow-sm max-w-md w-full p-8 m-8 z-90 text-left dark:bg-darkGray"
       @click.stop
     >
       <header class="modal-header relative flex justify-between">
         <h3 class="title text-lg font-bold text-black dark:text-white">
           {{ task.title }}
         </h3>
-        <button type="button" class="btn-close" @click="options" name="Task options">
+        <button
+          type="button"
+          class="btn-close"
+          aria-label="Edit Task"
+          @click="options"
+          name="Task options"
+        >
           <img src="../../assets/icon-vertical-ellipsis.svg" />
         </button>
         <EditDelete
