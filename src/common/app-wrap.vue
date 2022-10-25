@@ -1,12 +1,8 @@
 <template>
-  <HeaderMain :user="user">
+  <HeaderMain>
     <NavSidebar />
   </HeaderMain>
-  <TasksList
-    :user="user"
-    :currentColumnsList="this.currentColumnsList"
-    v-if="this.currentColumns.length > 0"
-  />
+  <TasksList v-if="this.currentColumns.length > 0" />
   <EmptyColumns v-else />
 </template>
 

@@ -21,7 +21,7 @@
         <img src="../assets/icon-vertical-ellipsis.svg" />
       </button>
       <EditDelete
-        v-show="this.showOptions"
+        v-if="this.showOptions"
         :editLabel="'Edit Board'"
         :deleteLabel="'Delete Board'"
         @edit="editItem"
@@ -30,7 +30,7 @@
     </div>
   </header>
   <transition name="slide-fade">
-    <TaskAddNew v-show="isAddNewModalVisible" @close="closeAddNewModal" />
+    <TaskAddNew v-if="isAddNewModalVisible" @close="closeAddNewModal" />
   </transition>
   <transition class="slide-fade">
     <EditBoard v-if="isEditBoardModalVisible" @close="closeEditModal"></EditBoard>
