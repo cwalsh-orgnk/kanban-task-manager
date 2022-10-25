@@ -9,13 +9,13 @@
         v-bind:key="column.name"
         class="column mt-6 w-[280px] min-w-[280px]"
       >
-        <h3 class="font-bold flex text-xs tracking-widest mb-6 text-mediumGray">
+        <h2 class="font-bold flex text-xs tracking-widest mb-6 text-mediumGray uppercase">
           <i
             class="icon w-[15px] h-[15px] min-w-[15px] mr-3 bg-mainPurple rounded-full"
             :style="{ backgroundColor: columnColors(index) }"
           ></i>
-          {{ column.name }}
-        </h3>
+          {{ column.name }} {{ taskCount(column) }}
+        </h2>
         <TaskCard
           v-for="task in column.tasks"
           :key="task.title"
@@ -24,7 +24,7 @@
         ></TaskCard>
       </div>
       <button
-        class="new-task w-[280px] min-w-[280px] rounded-md flex text-xl font-bold items-center justify-center text-mediumGray mt-16 h-[calc(100vh-8rem)]"
+        class="new-task w-[280px] min-w-[280px] rounded-md flex text-xl font-bold items-center justify-center text-mediumGray mt-16 h-[calc(100vh-8rem)] transition-colors hover:text-mainPurple"
         @click="showEditModalVisible"
       >
         + New Column
@@ -57,6 +57,13 @@ export default {
   },
   computed: {},
   methods: {
+    taskCount(column) {
+      if (column.tasks) {
+        return "(" + column.tasks.length + ")";
+      } else {
+        return "(0)";
+      }
+    },
     showEditModalVisible() {
       this.isEditBoardModalVisible = true;
     },
