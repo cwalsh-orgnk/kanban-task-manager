@@ -142,11 +142,11 @@ export default {
       const compareSubtasks = JSON.stringify(this.task.subtasks);
       if (this.originalStatus !== this.newStatus) {
         task.status = this.newStatus;
-        this.updateTaskDB();
         this.updateList(task);
+        this.updateTaskDB();
       }
       if (this.subtasksList != compareSubtasks) {
-        this.updateTaskDB(task);
+        this.updateTaskDB();
       }
       if (this.subtasksList === compareSubtasks || this.originalStatus === this.newStatus) {
         this.$emit("close");
@@ -172,7 +172,6 @@ export default {
       API.put("tasksApi", `/tasks`, {
         body: {
           boards: this.allTasks.boards,
-          tasks: this.allTasks.tasks,
         },
       })
         .then((result) => {
