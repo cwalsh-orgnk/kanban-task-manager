@@ -2,8 +2,8 @@
 
 @font-face {
     font-family: "ui-icons";
-    src: url("../../assets/orgnk-ui-icons/ui-icons.woff2") format("woff2"),
-      url("../../assets/orgnk-ui-icons/ui-icons.woff") format("woff");
+    src: url("./assets/orgnk-ui-icons/ui-icons.woff2") format("woff2"),
+      url("./assets/orgnk-ui-icons/ui-icons.woff") format("woff");
     font-weight: normal;
     font-style: normal;
     font-display: block;
@@ -31,23 +31,22 @@
     & + label {
       position: relative;
       display: block;
-      padding: 0 0 0 ($checkbox-radio-size + 15px);
+      padding: 0.75rem 0.75rem 0.75rem ($checkbox-radio-size + 35px);
       cursor: pointer;
 
       &:before {
         content: "";
         position: absolute;
         top: 2px;
-        left: 0;
+        left: 12px;
         display: inline-block;
         width: $checkbox-radio-size;
         height: $checkbox-radio-size;
         border: 0.5px solid #828fa3;
         border-radius: (4px / 2);
-        @include transition();
 
         @include breakpoint(xs) {
-          top: 3px;
+          top: 13px;
         }
       }
 
@@ -56,20 +55,26 @@
         display: block;
         position: absolute;
         top: 2px;
-        left: 0;
+        left: 12px;
         width: $checkbox-radio-size;
         height: $checkbox-radio-size;
         opacity: 0;
-        @include transition(opacity, transform);
+        background-color: transparent;
+        @include transition(opacity, transform, background-color, border-color);
 
         @include breakpoint(xs) {
-          top: 3px;
+          top: 13px;
         }
       }
 
       @include on-state(hover, focus) {
         &:before {
-          border-color: #635fc7;
+          border-color: #fff;
+          background-color: white;
+        }
+
+        &:after {
+          color: #635FC7
         }
       }
 

@@ -1,8 +1,8 @@
 <template>
   <div id="app" :class="lightMode ? 'light' : 'dark bg-veryDarkGray'">
     <authenticator>
-      <template v-slot="{ user }" v-if="allTasks != null && Object.keys(allTasks).length">
-        <AppWrap :user="user"> </AppWrap>
+      <template v-if="allTasks != null && Object.keys(allTasks).length">
+        <AppWrap> </AppWrap>
       </template>
     </authenticator>
   </div>
@@ -49,6 +49,8 @@ export default {
 </script>
 
 <style lang="scss">
+@import "./assets/base.scss";
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
