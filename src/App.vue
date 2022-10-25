@@ -29,6 +29,10 @@ export default {
       lastTodoId: "",
     };
   },
+  created() {
+    const html = document.documentElement; // returns the html tag
+    html.setAttribute("lang", "en");
+  },
   computed: {
     taskManagerAvailable() {
       if (this.allTasks != null && Object.keys(this.allTasks).length) {
