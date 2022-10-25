@@ -1,6 +1,6 @@
 <template>
   <button :class="buttonClass" class="text-mediumGray">
-    <img src="../../assets/icon-cross.svg" />
+    <img alt="" src="../../assets/icon-cross.svg" />
   </button>
 </template>
 <script>

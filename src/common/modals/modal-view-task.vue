@@ -18,7 +18,7 @@
           @click="options"
           name="Task options"
         >
-          <img src="../../assets/icon-vertical-ellipsis.svg" />
+          <img alt="" src="../../assets/icon-vertical-ellipsis.svg" />
         </button>
         <EditDelete
           v-if="this.showOptions"

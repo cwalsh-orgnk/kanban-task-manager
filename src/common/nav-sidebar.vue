@@ -3,7 +3,7 @@
     class="logo relative ml-6 mr-8 flex items-center h-full border-r border-solid border-linesLight dark:border-lines"
     :class="[sidebarOpen ? logoPaddingRight : logoPaddingRightNone]"
   >
-    <img :src="logo" />
+    <img alt="Kanban Task Manager Logo" :src="logo" />
   </div>
   <div
     :class="[sidebarOpen ? showOverlay : hideOverlay]"
@@ -27,11 +27,12 @@
             class="nav-item"
           >
             <img
+              alt=""
               class="mr-4"
               v-if="this.activeBoard.name == board.name"
               src="../assets/icon-board-white.svg"
             />
-            <img class="mr-4" v-else src="../assets/icon-board.svg" />
+            <img class="mr-4" alt="" v-else src="../assets/icon-board.svg" />
             {{ board.name }}
           </button>
         </li>
@@ -40,7 +41,7 @@
             class="nav-item w-full pt-[15px] pb-[14px] pl-[24px] pr-[25px] text-cente white m-0 flex items-center text-mainPurple rounded-r-full font-bold text-md transition-colors hover:bg-mainPurple hover:bg-opacity-10"
             @click="showAddBoardModal"
           >
-            <img class="mr-4" src="../assets/icon-board-purple.svg" />
+            <img alt="" class="mr-4" src="../assets/icon-board-purple.svg" />
             + Create New Board
           </button>
         </li>
@@ -52,30 +53,44 @@
       <div
         class="dark-mode bg-lightGray flex m-6 py-6 justify-center items-center transition-colors dark:bg-veryDarkGray"
       >
-        <img class="mr-4 w-[25px] min-w-[25px] h-[25px]" src="../assets/icon-light-theme.svg" />
+        <img
+          alt="Light mode icon"
+          class="mr-4 w-[25px] min-w-[25px] h-[25px]"
+          src="../assets/icon-light-theme.svg"
+        />
         <label class="switch">
-          <input type="checkbox" class="peer" checked @click="toggleTheme($event)" />
+          <input
+            aria-label="Toggle dark mode"
+            type="checkbox"
+            class="peer"
+            checked
+            @click="toggleTheme($event)"
+          />
           <span
             class="slider peer-checked:bg-mainPurple round hover:bg-mainPurpleHover peer-checked:hover:bg-mainPurpleHover"
           ></span>
         </label>
-        <img class="ml-4 w-[25px] min-w-[25px] h-[25px]" src="../assets/icon-dark-theme.svg" />
+        <img
+          alt="Dark mode icon"
+          class="ml-4 w-[25px] min-w-[25px] h-[25px]"
+          src="../assets/icon-dark-theme.svg"
+        />
       </div>
       <button
         class="nav-item w-[calc(100%-1.5rem)] pt-[15px] pb-[14px] pl-[24px] pr-[25px] text-cente white m-0 text-mainPurple rounded-r-full font-bold text-md mr-6 hover:bg-opacity-10 hidden items-center justify-center md:flex transition-colors hover:bg-mainPurpleHover"
         @click="showSidebar()"
       >
-        <img class="mr-4" src="../assets/icon-hide-sidebar.svg" />Hide sidebar
+        <img alt="" class="mr-4" src="../assets/icon-hide-sidebar.svg" />Hide sidebar
       </button>
     </div>
   </aside>
   <button
     class="fixed bottom-10 left-0 bg-mainPurple rounded-r-full opacity-100 transition-colors hover:bg-mainPurpleHover"
     :class="[sidebarOpen ? hideButton : showButton]"
-    name="Main Menu"
+    aria-label="Main Menu"
     @click="showSidebar()"
   >
-    <img class="m-[19px] w-[18px] h-[10px]" src="../assets/icon-show-sidebar.svg" />
+    <img alt="" class="m-[19px] w-[18px] h-[10px]" src="../assets/icon-show-sidebar.svg" />
   </button>
   <transition name="slide-fade">
     <AddBoard
