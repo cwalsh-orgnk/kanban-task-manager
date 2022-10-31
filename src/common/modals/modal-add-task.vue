@@ -55,7 +55,7 @@
       </div>
       <BaseButton
         :buttonText="'+ Add New Subtask'"
-        :class="'transition-colors hover:bg-opacity-25 dark:bg-white dark:hover:bg-mainPurpleHover dark:hover:text-white dark:text-mainPurple'"
+        :class="'w-full text-mainPurple bg-mainPurple bg-opacity-10 transition-colors dark:bg-white dark:hover:bg-mainPurpleHover dark:hover:text-white dark:text-mainPurple'"
         @click="addSubtask"
       />
       <h5 class="text-xs text-mediumGray font-bold mt-6 mb-2 dark:text-white">Status</h5>

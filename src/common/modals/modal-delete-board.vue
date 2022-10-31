@@ -70,6 +70,7 @@ export default {
         name: this.allTasks.boards[0].name,
       };
       TaskDataService.update(this.allTasks.boards);
+      this.$emit("close");
     },
     addTaskUI() {
       this.currentBoard[0] = this.newBoard;

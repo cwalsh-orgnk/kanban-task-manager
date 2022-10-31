@@ -141,9 +141,11 @@ export default {
         task.status = this.newStatus;
         this.updateList(task);
         TaskDataService.update(this.allTasks.boards);
+        this.$emit("close");
       }
       if (this.subtasksList != compareSubtasks) {
         TaskDataService.update(this.allTasks.boards);
+        this.$emit("close");
       }
       if (this.subtasksList === compareSubtasks || this.originalStatus === this.newStatus) {
         this.$emit("close");

@@ -151,6 +151,7 @@ export default {
       }
       this.currentBoard[0].name == board.name;
       TaskDataService.update(this.allTasks.boards);
+      this.$emit("close");
     },
     close() {
       this.$emit("close");

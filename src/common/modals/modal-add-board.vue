@@ -134,6 +134,7 @@ export default {
       };
       this.addTaskUI(this.allTasks.boards, board);
       TaskDataService.post(this.allTasks.boards);
+      this.$emit("close");
     },
     addTaskUI(boardList, board) {
       boardList.push(board);
