@@ -33,8 +33,10 @@ class TaskDataService {
   }
 
   create(data) {
-    API.post("tasksApi", `/tasks`, {
-      data,
+    API.put("tasksApi", `/tasks`, {
+      body: {
+        boards: data,
+      },
     })
       .then((result) => {
         console.log(result);

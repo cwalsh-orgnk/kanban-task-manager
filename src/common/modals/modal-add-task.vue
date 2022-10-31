@@ -182,7 +182,7 @@ export default {
         board: this.activeBoard.id,
       };
       this.addTaskUI(this.allTasks.boards, task);
-      TaskDataService.post(this.allTasks.boards);
+      TaskDataService.update(this.allTasks.boards);
       this.newTask = {
         id: uuid.v4(),
         title: "",
