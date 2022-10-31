@@ -179,11 +179,6 @@ export default {
       this.close();
     },
     close() {
-      if (this.status === this.task.status) {
-        this.$emit("listUpdated", false);
-      } else {
-        this.$emit("listUpdated", true);
-      }
       this.$emit("close");
     },
     check(subtask) {

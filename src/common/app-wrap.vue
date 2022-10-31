@@ -21,12 +21,6 @@ export default {
     TasksList,
     EmptyColumns,
   },
-  data() {
-    return {
-      user: {},
-      taskManager: {},
-    };
-  },
   mounted() {
     this.setCurrentBoards();
     this.currentColumnsList();

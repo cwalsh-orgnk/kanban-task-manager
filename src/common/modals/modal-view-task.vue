@@ -79,7 +79,6 @@ export default {
     EditDelete,
   },
   emits: {
-    listUpdated: false,
     showEditModal: false,
     deleteModal: false,
   },

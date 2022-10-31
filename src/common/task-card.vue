@@ -59,9 +59,6 @@ export default {
     TaskEditDetails,
     TaskDelete,
   },
-  emits: {
-    listUpdated: false,
-  },
   props: {
     task: Object,
     status: String,
@@ -73,7 +70,6 @@ export default {
       isDetailsModalVisible: false,
       isEditModalVisible: false,
       isDeleteModalVisible: false,
-      listUpdated: false,
     };
   },
   computed: {
