@@ -15,8 +15,8 @@ import { Amplify } from "aws-amplify";
 import awsconfig from "./aws-exports";
 import AppWrap from "./common/app-wrap.vue";
 import store from "./store/store.js";
-
 Amplify.configure(awsconfig);
+
 export default {
   name: "app",
   components: {

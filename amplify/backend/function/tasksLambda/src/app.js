@@ -78,12 +78,6 @@ app.put("/tasks", function (request, response) {
   if (request.body.boards) {
     params.ExpressionAttributeValues[":boards"] = request.body.boards;
     params.UpdateExpression += "#boards = :boards, ";
-  }
-  if (request.body.tasks) {
-    params.ExpressionAttributeValues[":tasks"] = request.body.tasks;
-    params.UpdateExpression += "tasks = :tasks, ";
-  }
-  if (request.body.boards || request.body.tasks) {
     params.ExpressionAttributeValues[":updatedAt"] = timestamp;
     params.UpdateExpression += "updatedAt = :updatedAt";
   }
@@ -103,7 +97,6 @@ app.post("/tasks", function (request, response) {
     Item: {
       ...request.body,
       id: getUserId(request), // auto-generate id
-      complete: false, // default for new tasks
       createdAt: timestamp,
       updatedAt: timestamp,
       userId: getUserId(request), // userId from request identity context
@@ -123,7 +116,7 @@ app.delete("/tasks/:id", function (request, response) {
   let params = {
     TableName: tableName,
     Key: {
-      id: request.params.id,
+      id: getUserId(request),
     },
   };
   dynamodb.delete(params, (error, result) => {

@@ -38,7 +38,6 @@ export default {
       isEditBoardModalVisible: false,
     };
   },
-  computed: {},
   methods: {
     showEditModalVisible() {
       this.isEditBoardModalVisible = true;
