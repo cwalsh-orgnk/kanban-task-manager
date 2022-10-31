@@ -1,53 +1,53 @@
 import { Amplify } from "aws-amplify";
 import awsconfig from "./../aws-exports";
 import { API } from "aws-amplify";
-
 Amplify.configure(awsconfig);
+var uuid = require("uuid");
+
+const defaultTasks = {
+  complete: false,
+  boards: [
+    {
+      name: "Board with columns",
+      columns: [
+        { name: "Todo", tasks: [] },
+        { name: "Doing", tasks: [] },
+      ],
+      id: uuid.v4(),
+    },
+  ],
+  id: uuid.v4(),
+};
+
 class TaskDataService {
   getAll() {
-    let tasks = null;
-    API.get("tasksApi", `/tasks`, {})
+    const tasks = API.get("tasksApi", `/tasks`, {})
       .then((result) => {
-        console.log(result);
-        tasks = JSON.parse(result.body);
+        return JSON.parse(result.body);
       })
       .catch((err) => {
         console.log(err);
+        return defaultTasks;
       });
     return tasks;
   }
-  get(id) {
-    API.get("tasksApi", `/tasks/${id}`, {})
-      .then((result) => {
-        console.log(JSON.parse(result.body));
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
 
   create(data) {
-    console.log(`addTodo`);
     API.post("tasksApi", `/tasks`, {
       data,
     })
       .then((result) => {
         console.log(result);
-        this.lastTodoId = JSON.parse(result.body).id;
       })
       .catch((err) => {
         console.log(err);
       });
   }
 
-  update(id, data) {
-    if (!id) return;
-    console.log(`updateTodo-${id}`);
+  update(data) {
     API.put("tasksApi", `/tasks`, {
       body: {
-        id: id,
-        data,
-        complete: true,
+        boards: data,
       },
     })
       .then((result) => {
@@ -64,7 +64,6 @@ class TaskDataService {
     API.del("tasksApi", `/tasks/${id}`, {})
       .then((result) => {
         console.log(result);
-        this.lastTodoId = "";
       })
       .catch((err) => {
         console.log(err);
