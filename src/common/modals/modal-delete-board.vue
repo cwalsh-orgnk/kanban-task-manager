@@ -3,7 +3,7 @@
     class="modal-backdrop fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50"
     @click="close"
   >
-    <div
+    <article
       class="modal max-h-[calc(100vh-100px)] overflow-y-scroll overflow-x-hidden sm:overflow-hidden sm:max-h-full bg-white flex flex-col shadow-sm max-w-lg w-full p-8 m-8 text-left dark:bg-darkGray"
       @click.stop
     >
@@ -26,16 +26,13 @@
           @click="close"
         />
       </div>
-    </div>
+    </article>
   </div>
 </template>
 <script>
 import BaseButton from "../buttons/base-button.vue";
 import store from "../../store/store.js";
-import { API } from "aws-amplify";
-import { Amplify } from "aws-amplify";
-import awsconfig from "../../aws-exports";
-Amplify.configure(awsconfig);
+import TaskDataService from "../../service/api.js";
 
 export default {
   name: "DeleteBoard",
@@ -72,27 +69,10 @@ export default {
         id: this.allTasks.boards[0].id,
         name: this.allTasks.boards[0].name,
       };
-      this.addTaskDB(this.allTasks.id);
+      TaskDataService.update(this.allTasks.boards);
     },
     addTaskUI() {
       this.currentBoard[0] = this.newBoard;
-    },
-    addTaskDB(id) {
-      console.log(`addBoardDB`);
-      API.put("tasksApi", `/tasks`, {
-        body: {
-          id: id,
-          boards: this.allTasks.boards,
-          tasks: this.allTasks.tasks,
-        },
-      })
-        .then((result) => {
-          console.log(result);
-          this.close();
-        })
-        .catch((err) => {
-          console.log(err);
-        });
     },
     close() {
       this.$emit("close");

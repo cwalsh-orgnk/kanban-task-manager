@@ -12,14 +12,15 @@
   ></div>
   <aside
     :class="[sidebarOpen ? activeClass : hiddenClass]"
+    v-if="allTasks != null && Object.keys(allTasks).length > 0"
     class="top-20 rounded-lg z-50 md:rounded-none top left-0 pt-6 border-r border-solid border-linesLight dark:bg-darkGray dark:border-lines"
   >
     <span
       class="font-bold text-left md:text-center uppercase text-mediumGray text-xs w-full block mb-4 ml-8 tracking-widest"
-      >All boards ( 3 )</span
+      >All boards ({{ boardCount }})</span
     >
     <nav class="mr-6">
-      <ul v-if="allTasks != null && Object.keys(allTasks).length > 0">
+      <ul>
         <li v-for="board in allTasks.boards" :key="board.name">
           <button
             :class="[this.activeBoard.name === board.name ? activeBoardClass : hiddenBoardClass]"
@@ -38,7 +39,7 @@
         </li>
         <li>
           <button
-            class="nav-item w-full pt-[15px] pb-[14px] pl-[24px] pr-[25px] text-cente white m-0 flex items-center text-mainPurple rounded-r-full font-bold text-md transition-colors hover:bg-mainPurple hover:bg-opacity-10"
+            class="nav-item w-full pt-[15px] pb-[14px] pl-[24px] pr-[25px] text-cente white m-0 flex items-center text-mainPurple rounded-r-full font-bold text-md transition-colors hover:bg-mainPurple hover:bg-opacity-10 dark:hover:bg-white dark:hover:bg-opacity-100"
             @click="showAddBoardModal"
           >
             <img alt="" class="mr-4" src="../assets/icon-board-purple.svg" />
@@ -55,29 +56,29 @@
       >
         <img
           alt="Light mode icon"
-          class="mr-4 w-[25px] min-w-[25px] h-[25px]"
+          class="mr-12 w-[25px] min-w-[25px] h-[25px]"
           src="../assets/icon-light-theme.svg"
         />
-        <label class="switch">
+        <label class="switch absolute inline-block w-16 h-8">
           <input
             aria-label="Toggle dark mode"
             type="checkbox"
-            class="peer"
+            class="peer opacity-0 w-0 h-0"
             checked
             @click="toggleTheme($event)"
           />
           <span
-            class="slider peer-checked:bg-mainPurple round hover:bg-mainPurpleHover peer-checked:hover:bg-mainPurpleHover"
+            class="slider absolute cursor-pointer inset-0 bg-linesLight rounded-3xl peer-checked:bg-mainPurple hover:bg-mainPurpleHover peer-checked:hover:bg-mainPurpleHover before:rounded-full before:absolute before:content-[''] before:h-6 before:w-6 before:left-1 before:bottom-1 before:bg-white before:transition-colors"
           ></span>
         </label>
         <img
           alt="Dark mode icon"
-          class="ml-4 w-[25px] min-w-[25px] h-[25px]"
+          class="ml-12 w-[25px] min-w-[25px] h-[25px]"
           src="../assets/icon-dark-theme.svg"
         />
       </div>
       <button
-        class="nav-item w-[calc(100%-1.5rem)] pt-[15px] pb-[14px] pl-[24px] pr-[25px] text-cente white m-0 text-mainPurple rounded-r-full font-bold text-md mr-6 hover:bg-opacity-10 hidden items-center justify-center md:flex transition-colors hover:bg-mainPurpleHover"
+        class="nav-item w-[calc(100%-1.5rem)] pt-[15px] pb-[14px] pl-[24px] pr-[25px] text-cente white m-0 text-mainPurple rounded-r-full font-bold text-md mr-6 hover:bg-opacity-10 hidden items-center justify-center md:flex transition-colors hover:bg-mainPurpleHover dark:hover:bg-white dark:hover:bg-opacity-100"
         @click="showSidebar()"
       >
         <img alt="" class="mr-4" src="../assets/icon-hide-sidebar.svg" />Hide sidebar
@@ -86,7 +87,7 @@
   </aside>
   <button
     class="fixed bottom-10 left-0 bg-mainPurple rounded-r-full opacity-100 transition-colors hover:bg-mainPurpleHover"
-    :class="[sidebarOpen ? hideButton : showButton]"
+    :class="[sidebarOpen ? 'opacity-0 hidden' : 'opacity-100 visible']"
     aria-label="Main Menu"
     @click="showSidebar()"
   >
@@ -116,14 +117,11 @@ export default {
   data() {
     return {
       isAddBoardModalVisible: false,
-      user: {},
-      lastTodoId: "",
-      mobileActiveClass: " translate-x-1/2 max-w-[calc(100%-60px)] mx-auto l-50% r-50% ",
       showOverlay:
         "overlay fixed w-screen h-screen inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 md:hidden",
       hideOverlay: "hidden",
       activeClass:
-        "aside z-100 position fixed -translate-x-1/2 max-w-[calc(100%-60px)] mx-auto left-1/2 right-1/2 top-28 bg-white sidebar-visible opacity-100 md:translate-x-0 md:w-[300px] md:h-[calc(100vh-96px] md:top-24 md:left-0 md:right-[initial] visible",
+        "aside z-100 position fixed -translate-x-1/2 max-w-[calc(100%-60px)] mx-auto left-1/2 right-1/2 top-28 bg-white translate-x-0 w-80 opacity-100 md:translate-x-0 md:w-[300px] md:h-[calc(100vh-96px] md:top-24 md:left-0 md:right-[initial] visible",
       hiddenClass:
         "aside position w-full fixed h-auto -translate-x-1/2 max-w-[calc(100%-60px)] left-1/2 right-1/2  md:translate-x-0 bg-white md:h-[100vh] top-24 md:left-0 opacity-0 invisible",
       showButton: "opacity-100",
@@ -134,6 +132,7 @@ export default {
         "nav-item-active w-full pt-[15px] pb-[14px] pl-[24px] pr-[25px] text-center bg-mainPurple white m-0 flex items-center text-white rounded-r-full font-bold text-md",
       hiddenBoardClass:
         "nav-item w-full pt-[15px] pb-[14px] pl-[24px] pr-[25px] text-cente white m-0 flex items-center text-mediumGray rounded-r-full font-bold text-md",
+      boardCount: 1,
     };
   },
   watch: {
@@ -141,6 +140,13 @@ export default {
     active: function () {
       if (this.sidebarOpen) {
         document.body.style.overflow = this.sidebarOpen ? "hidden" : "";
+      }
+    },
+    allTasks: function () {
+      if (this.allTasks && this.allTasks.boards) {
+        return (this.boardCount = this.allTasks.length);
+      } else {
+        return 0;
       }
     },
   },
@@ -188,9 +194,7 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss">
 @import "../assets/mixins.scss";
-button {
-  transition: width ease-in-out 0.3s opacity ease-in-out 0.3s;
-}
+
 aside {
   transition: opacity ease-in-out 0.3s;
 
@@ -221,60 +225,12 @@ aside {
 .slide-fade-leave-to {
   opacity: 0;
 }
-/* The switch - the box around the slider */
-.switch {
-  position: relative;
-  display: inline-block;
-  width: 60px;
-  height: 30px;
-}
-
-/* Hide default HTML checkbox */
-.switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-/* The slider */
-.slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #ccc;
-  -webkit-transition: 0.4s;
-  transition: 0.4s;
-}
-
-.slider:before {
-  position: absolute;
-  content: "";
-  height: 22px;
-  width: 22px;
-  left: 4px;
-  bottom: 4px;
-  background-color: white;
-  -webkit-transition: 0.4s;
-  transition: 0.4s;
-}
 
 input:focus + .slider {
   box-shadow: 0 0 1px #635fc7;
 }
 
 input:not(:checked) + .slider:before {
-  -webkit-transform: translateX(26px);
-}
-
-/* Rounded sliders */
-.slider.round {
-  border-radius: 30px;
-}
-
-.slider.round:before {
-  border-radius: 50%;
+  transform: translateX(26px);
 }
 </style>

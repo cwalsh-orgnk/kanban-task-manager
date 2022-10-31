@@ -3,7 +3,7 @@
     class="modal-backdrop fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50"
     @click="close"
   >
-    <div
+    <article
       class="modal max-h-[calc(100vh-100px)] overflow-y-scroll overflow-x-hidden sm:overflow-hidden sm:max-h-full bg-white flex flex-col shadow-sm max-w-lg w-full p-8 m-8 text-left dark:bg-darkGray"
       @click.stop
     >
@@ -55,7 +55,7 @@
       </div>
       <BaseButton
         :buttonText="'+ Add New Subtask'"
-        :class="'w-full text-mainPurple bg-mainPurple bg-opacity-10 transition-colors hover:bg-opacity-25 dark:bg-white dark:text-mainPurple'"
+        :class="'transition-colors hover:bg-opacity-25 dark:bg-white dark:hover:bg-mainPurpleHover dark:hover:text-white dark:text-mainPurple'"
         @click="addSubtask"
       />
       <h5 class="text-xs text-mediumGray font-bold mt-6 mb-2 dark:text-white">Status</h5>
@@ -67,7 +67,7 @@
         :class="'w-full text-white transition-colors hover:bg-mainPurpleHover'"
         @click="saveTask"
       />
-    </div>
+    </article>
   </div>
 </template>
 <script>
@@ -77,12 +77,8 @@ import TextArea from "../form/textarea-input.vue";
 import SelectInput from "../form/select-input.vue";
 import RemoveButton from "../buttons/remove-button.vue";
 import store from "../../store/store.js";
-import { API } from "aws-amplify";
-import { Amplify } from "aws-amplify";
-import awsconfig from "../../aws-exports";
+import TaskDataService from "../../service/api.js";
 var uuid = require("uuid");
-
-Amplify.configure(awsconfig);
 
 export default {
   name: "TaskAddNew",
@@ -186,7 +182,7 @@ export default {
         board: this.activeBoard.id,
       };
       this.addTaskUI(this.allTasks.boards, task);
-      this.addTaskDB(this.allTasks.id);
+      TaskDataService.post(this.allTasks.boards);
       this.newTask = {
         id: uuid.v4(),
         title: "",
@@ -219,23 +215,6 @@ export default {
           });
         }
       });
-    },
-    addTaskDB(id) {
-      console.log(`addTaskDB`);
-      API.post("tasksApi", `/tasks`, {
-        body: {
-          id: id,
-          boards: this.allTasks.boards,
-          tasks: this.allTasks.tasks,
-        },
-      })
-        .then((result) => {
-          console.log(result);
-          this.close();
-        })
-        .catch((err) => {
-          console.log(err);
-        });
     },
     initNewTask() {
       this.submitted = false;

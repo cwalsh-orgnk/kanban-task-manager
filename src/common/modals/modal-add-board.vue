@@ -3,7 +3,7 @@
     class="modal-backdrop fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50"
     @click="close"
   >
-    <div
+    <article
       class="modal max-h-[calc(100vh-100px)] overflow-y-scroll overflow-x-hidden sm:overflow-hidden sm:max-h-full bg-white flex flex-col shadow-sm max-w-lg w-full p-8 m-8 text-left dark:bg-darkGray"
       @click.stop
     >
@@ -42,15 +42,15 @@
       </div>
       <BaseButton
         :buttonText="'+ Add New Column'"
-        :class="'w-full bg-mainPurple bg-opacity-10 mb-6 text-mainPurple dark:bg-white dark:text-mainPurple'"
+        :class="'w-full bg-mainPurple bg-opacity-10 mb-6 transition-colors text-mainPurple dark:bg-white dark:hover:bg-mainPurpleHover dark:hover:text-white dark:text-mainPurple'"
         @click="addColumn"
       />
       <BaseButton
         :buttonText="'Create New board'"
-        :class="'w-full text-white'"
+        :class="'w-full text-white transition-colors hover:bg-mainPurpleHover'"
         @click="saveBoard"
       />
-    </div>
+    </article>
   </div>
 </template>
 <script>
@@ -58,11 +58,9 @@ import BaseButton from "../buttons/base-button.vue";
 import TextInput from "../form/text-input.vue";
 import RemoveButton from "../buttons/remove-button.vue";
 import store from "../../store/store.js";
-import { API } from "aws-amplify";
-import { Amplify } from "aws-amplify";
-import awsconfig from "../../aws-exports";
+import TaskDataService from "../../service/api.js";
 var uuid = require("uuid");
-Amplify.configure(awsconfig);
+
 export default {
   name: "AddBoard",
   components: {
@@ -135,27 +133,10 @@ export default {
         columns: columns.length ? columns : null,
       };
       this.addTaskUI(this.allTasks.boards, board);
-      this.addTaskDB(this.allTasks.id);
+      TaskDataService.post(this.allTasks.boards);
     },
     addTaskUI(boardList, board) {
       boardList.push(board);
-    },
-    addTaskDB(id) {
-      console.log(`addBoardDB`);
-      API.post("tasksApi", `/tasks`, {
-        body: {
-          id: id,
-          boards: this.allTasks.boards,
-          tasks: this.allTasks.tasks,
-        },
-      })
-        .then((result) => {
-          console.log(result);
-          this.close();
-        })
-        .catch((err) => {
-          console.log(err);
-        });
     },
     close() {
       this.$emit("close");

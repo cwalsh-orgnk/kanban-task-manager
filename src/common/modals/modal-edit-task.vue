@@ -3,7 +3,7 @@
     class="modal-backdrop fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50"
     @click="close"
   >
-    <div
+    <article
       class="modal max-h-[calc(100vh-100px)] overflow-y-scroll overflow-x-hidden sm:overflow-hidden sm:max-h-full bg-white flex flex-col shadow-sm max-w-md w-full p-8 m-8 z-90 text-left dark:bg-darkGray"
       @click.stop
     >
@@ -50,7 +50,7 @@
       </div>
       <BaseButton
         :buttonText="'+ Add New Subtask'"
-        :class="'w-full text-mainPurple bg-mainPurple bg-opacity-10 transition-colors hover:bg-opacity-25 dark:bg-white dark:text-mainPurple'"
+        :class="'w-full text-mainPurple bg-mainPurple bg-opacity-10 transition-colors hover:bg-opacity-25 dark:bg-white dark:hover:bg-mainPurpleHover dark:hover:text-white dark:text-mainPurple'"
         @click="addSubtask"
       />
       <h5 class="text-xs text-mediumGray font-bold mt-6 mb-2 dark:text-white">Current Status</h5>
@@ -66,7 +66,7 @@
         :class="'w-full text-white transition-colors hover:bg-mainPurpleHover'"
         @click="saveTask()"
       />
-    </div>
+    </article>
   </div>
 </template>
 <script>
@@ -76,10 +76,8 @@ import TextArea from "../form/textarea-input.vue";
 import SelectInput from "../form/select-input.vue";
 import RemoveButton from "../buttons/remove-button.vue";
 import store from "../../store/store.js";
-import { API } from "aws-amplify";
-import { Amplify } from "aws-amplify";
-import awsconfig from "../../aws-exports";
-Amplify.configure(awsconfig);
+import TaskDataService from "../../service/api.js";
+
 export default {
   name: "TaskDetails",
   components: {
@@ -136,12 +134,7 @@ export default {
       if (this.updatedTask.subtasks) {
         this.updatedTask.subtasks.push(subtask);
       } else {
-        this.updatedTask.subtasks = [
-          {
-            placeholder: "e.g. Make a pot of coffee",
-            title: null,
-          },
-        ];
+        this.updatedTask.subtasks = [subtask];
       }
     },
     removeSubtask(defaultSubtasks, index) {
@@ -181,26 +174,9 @@ export default {
         subtasks: this.updatedTask.subtasks,
         status: this.updatedTask.status,
       };
-      console.log(updatedTask);
       this.updateList(updatedTask);
-      this.updateTaskDB();
-
+      TaskDataService.update(this.allTasks.boards);
       this.close();
-    },
-    updateTaskDB() {
-      API.put("tasksApi", `/tasks`, {
-        body: {
-          boards: this.allTasks.boards,
-          tasks: this.allTasks.tasks,
-        },
-      })
-        .then((result) => {
-          console.log(result);
-          this.$emit("close");
-        })
-        .catch((err) => {
-          console.log(err);
-        });
     },
     close() {
       if (this.status === this.task.status) {

@@ -3,7 +3,7 @@
     class="modal-backdrop fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50"
     @click="close"
   >
-    <div
+    <article
       class="modal max-h-[calc(100vh-100px)] overflow-y-scroll overflow-x-hidden sm:overflow-hidden sm:max-h-full bg-white flex flex-col shadow-sm max-w-lg w-full p-8 m-8 text-left dark:bg-darkGray"
       @click.stop
     >
@@ -41,11 +41,15 @@
       </div>
       <BaseButton
         :buttonText="'+ Add New Column'"
-        :class="'w-full text-mainPurple bg-mainPurple bg-opacity-10 mb-6 dark:bg-white dark:text-mainPurple'"
+        :class="'w-full text-mainPurple bg-mainPurple bg-opacity-10 mb-6 transition-colors hover:bg-opacity-25 dark:bg-white dark:hover:bg-mainPurpleHover dark:hover:text-white dark:text-mainPurple'"
         @click="addColumn"
       />
-      <BaseButton :buttonText="'Save Changes'" :class="'w-full text-white'" @click="saveBoard" />
-    </div>
+      <BaseButton
+        :buttonText="'Save Changes'"
+        :class="'w-full text-white hover:bg-mainPurpleHover'"
+        @click="saveBoard"
+      />
+    </article>
   </div>
 </template>
 <script>
@@ -53,10 +57,8 @@ import BaseButton from "../buttons/base-button.vue";
 import TextInput from "../form/text-input.vue";
 import RemoveButton from "../buttons/remove-button.vue";
 import store from "../../store/store.js";
-import { API } from "aws-amplify";
-import { Amplify } from "aws-amplify";
-import awsconfig from "../../aws-exports";
-Amplify.configure(awsconfig);
+import TaskDataService from "../../service/api.js";
+
 export default {
   name: "EditBoard",
   components: {
@@ -109,7 +111,6 @@ export default {
     },
     saveBoard() {
       const columnList = [];
-
       this.newBoard.columns.forEach((element) => {
         if (element != null) {
           let newColumn = {
@@ -118,17 +119,14 @@ export default {
           columnList.push(newColumn);
         }
       });
-
       if (!this.validateBoard(this.newBoard.name)) {
         return;
       }
-
       let board = {
         id: this.newBoard.id,
         name: this.newBoard.name,
         columns: columnList.length ? columnList : null,
       };
-
       this.allTasks.boards.forEach((element) => {
         if (element.id === board.id) {
           element = board;
@@ -138,7 +136,6 @@ export default {
           console.log(element.tasks);
         }
       });
-
       this.allTasks.boards.forEach((element) => {
         if (element.id === board.id) {
           element = board;
@@ -146,33 +143,14 @@ export default {
           this.activeBoard.name = board.name;
         }
       });
-
       this.currentColumns = [];
       if (this.currentBoard[0].columns) {
         this.currentBoard[0].columns.forEach((element) => {
           this.currentColumns.push(element.name);
         });
       }
-
       this.currentBoard[0].name == board.name;
-
-      this.addTaskDB(this.allTasks.id);
-    },
-    addTaskDB(id) {
-      API.put("tasksApi", `/tasks`, {
-        body: {
-          id: id,
-          boards: this.allTasks.boards,
-          tasks: this.allTasks.tasks,
-        },
-      })
-        .then((result) => {
-          console.log(result);
-          this.close();
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      TaskDataService.update(this.allTasks.boards);
     },
     close() {
       this.$emit("close");

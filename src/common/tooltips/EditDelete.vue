@@ -1,6 +1,6 @@
 <template>
   <div
-    class="tooltip absolute flex flex-col rounded-lg p-4 bottom-0 translate-y-full right-0 bg-white w-[192px] translate-x-1/2 z-50"
+    class="tooltip absolute flex flex-col rounded-lg p-4 bottom-0 translate-y-full right-0 bg-white w-[192px] translate-x-1/2 z-50 dark:bg-veryDarkGray"
   >
     <button class="text-mediumGray text-base font-medium text-left mb-4" @click="editItem">
       {{ editLabel }}

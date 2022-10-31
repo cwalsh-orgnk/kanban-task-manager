@@ -145,8 +145,8 @@ select {
     position: relative;
     transition: all .3s ease-in-out;
     width: 100%;
-	vertical-align: middle;
-	cursor: pointer;
+	  vertical-align: middle;
+	  cursor: pointer;
 
 	&:not([multiple]) {
 		padding-right: 40px;
@@ -183,4 +183,13 @@ select {
 		color: blue;
 		text-shadow: none;
 	}
+}
+
+.dark {
+
+  select {
+    &:not([multiple]) {
+      @include select-arrow(#fff);
+    }
+  }
 }

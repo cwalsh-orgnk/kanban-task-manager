@@ -12,12 +12,12 @@
     <button
       :class="this.addTaskButtonClass"
       @click="showModal"
-      class="p-[12px] rounded-3xl md:pt-[15px] md:pb-[14px] md:pl-[24px] md:pr-[25px] text-center bg-mainPurple white m-0 ml-auto flex md:rounded-full font-bold text-md mr-6 justify-center"
+      class="p-[12px] rounded-3xl md:pt-[15px] md:pb-[14px] md:pl-[24px] md:pr-[25px] text-center bg-mainPurple white m-0 ml-auto flex md:rounded-full font-bold text-md mr-6 justify-center hover:bg-mainPurpleHover"
     >
       {{ buttonText }}
     </button>
     <div class="tooltip-wrap relative">
-      <button type="button" class="btn-close" @click="options" aria-label="Board settings">
+      <button type="button" class="btn-close -m-6 p-6" @click="options" aria-label="Board settings">
         <img alt="" src="../assets/icon-vertical-ellipsis.svg" />
       </button>
       <EditDelete

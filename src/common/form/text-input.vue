@@ -11,7 +11,7 @@
     :value="value"
     :class="inputClass"
     :placeholder="placeholder"
-    class="w-full border border-linesLight border-opacity-80 py-2 px-4 text-base font-medium text-black rounded transition-colors hover:border-mainPurple dark:bg-darkGray dark:text-white dark:border-[#828FA3]"
+    class="w-full border border-linesLight border-opacity-80 py-2 px-4 text-base font-medium text-black rounded transition-colors hover:border-mainPurple dark:hover:border-mainPurple dark:bg-darkGray dark:text-white dark:border-[#828FA3]"
     :v-bind:value="value"
     v-on:input="$emit('input', $event.target.value)"
   />

@@ -3,7 +3,7 @@
     class="modal-backdrop fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50"
     @click="close(task)"
   >
-    <div
+    <article
       class="modal max-h-[calc(100vh-100px)] overflow-y-scroll overflow-x-hidden sm:overflow-visible sm:max-h-full bg-white flex flex-col shadow-sm max-w-md w-full p-8 m-8 z-90 text-left dark:bg-darkGray"
       @click.stop
     >
@@ -13,7 +13,7 @@
         </h3>
         <button
           type="button"
-          class="btn-close"
+          class="btn-close -m-6 p-6"
           aria-label="Edit Task"
           @click="options"
           name="Task options"
@@ -28,11 +28,11 @@
           @delete="deleteItem"
         />
       </header>
-      <div v-if="task.description">
+      <section v-if="task.description">
         <p class="text-base font-medium text-mediumGray mt-6">
           {{ task.description }}
         </p>
-      </div>
+      </section>
 
       <section class="tasks">
         <h5 class="text-xs text-mediumGray font-bold mt-6 mb-4 dark:text-white">
@@ -61,7 +61,7 @@
           />
         </div>
       </section>
-    </div>
+    </article>
   </div>
 </template>
 <script>
@@ -69,10 +69,7 @@ import SelectInput from "../form/select-input.vue";
 import CheckboxInput from "../form/checkbox-input.vue";
 import EditDelete from "../tooltips/EditDelete.vue";
 import store from "../../store/store.js";
-import { API } from "aws-amplify";
-import { Amplify } from "aws-amplify";
-import awsconfig from "../../aws-exports";
-Amplify.configure(awsconfig);
+import TaskDataService from "../../service/api.js";
 
 export default {
   name: "TaskDetails",
@@ -143,10 +140,10 @@ export default {
       if (this.originalStatus !== this.newStatus) {
         task.status = this.newStatus;
         this.updateList(task);
-        this.updateTaskDB();
+        TaskDataService.update(this.allTasks.boards);
       }
       if (this.subtasksList != compareSubtasks) {
-        this.updateTaskDB();
+        TaskDataService.update(this.allTasks.boards);
       }
       if (this.subtasksList === compareSubtasks || this.originalStatus === this.newStatus) {
         this.$emit("close");
@@ -167,20 +164,6 @@ export default {
     },
     selected(event) {
       this.newStatus = event.target.value;
-    },
-    updateTaskDB() {
-      API.put("tasksApi", `/tasks`, {
-        body: {
-          boards: this.allTasks.boards,
-        },
-      })
-        .then((result) => {
-          console.log(result);
-          this.$emit("close");
-        })
-        .catch((err) => {
-          console.log(err);
-        });
     },
   },
   setup() {
