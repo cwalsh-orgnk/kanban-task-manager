@@ -133,7 +133,7 @@ export default {
         columns: columns.length ? columns : null,
       };
       this.addTaskUI(this.allTasks.boards, board);
-      TaskDataService.post(this.allTasks.boards);
+      TaskDataService.update(this.allTasks.boards);
       this.$emit("close");
     },
     addTaskUI(boardList, board) {
